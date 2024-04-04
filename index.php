@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +37,23 @@
         </div>
     </div>
 </nav>
+
+<?php
+if (isset($_GET['status'])) {
+    switch ($_GET['status']) {
+        case 'db_deleted':
+            echo '<div class="alert alert-success text-center" role="alert">
+                    <h4 class="alert-heading">Database was deleted successfully.</h4>
+                  </div>';
+            break;
+        case 'conn_deleted':
+            echo '<div class="alert alert-success text-center" role="alert">
+                    <h4 class="alert-heading">Saved database connection was deleted successfully.</h4>
+                  </div>';
+            break;
+    }
+}
+?>
 
 <header class="jumbotron text-center">
     <h1>Hi 👋, I'm <a href="https://www.linkedin.com/in/matyas-zavora/">Matyáš</a></h1>
@@ -118,6 +138,10 @@
                     <a href="./info.php" class="btn btn-success">View project</a>
                     <a href="https://github.com/matyas-zavora/aplha-3" class="btn btn-secondary" target="_blank">GitHub
                         Repo</a>
+                    <?php if (isset($_SESSION['conn_params'])): ?>
+                        <a href="./delete.php?todo=db" class="btn btn-danger">Delete Database</a>
+                        <a href="./delete.php?todo=conn" class="btn btn-danger">Delete Connection</a>
+                    <?php endif; ?>
                 </div>
                 <div class="collapse" id="project2Collapse">
                     <div class="card card-body">
@@ -224,13 +248,17 @@
                                         style="max-width: 100%; height: auto;"></a>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<?php
+if (isset($_GET['status'])) {
+echo '<script> setTimeout(() => { window.location.href = "./index.php"; }, 2000); </script>';
+}
+?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

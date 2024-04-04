@@ -1,7 +1,12 @@
 <?php
-include "../templates/read.html";
-include "../config.php";
 session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: ../");
+    exit();
+}
+include "../templates/read.php";
+$conn_params = $_SESSION['conn_params'];
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -89,6 +94,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     echo "</tbody></table>";
 
-    $conn->close();
 }
 echo '</div></body></html>';

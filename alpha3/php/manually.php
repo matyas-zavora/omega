@@ -1,7 +1,12 @@
 <?php
 session_start();
-include "../templates/manually.html";
-include "../config.php";
+if (!isset($_SESSION['email'])) {
+    header("Location: ../");
+    exit();
+}
+include "../templates/manually.php";
+$conn_params = $_SESSION['conn_params'];
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['formName'] == 'dataInsertPicker') {
@@ -86,7 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $conn->commit();
         }
         $stmt->close();
-        $conn->close();
     }
 }
 function handleUserInsertManually(mysqli $conn): mysqli_stmt|null

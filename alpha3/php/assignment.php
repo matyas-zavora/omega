@@ -1,3 +1,7 @@
 <?php
-include '../templates/assignment.html';
-?>
+session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: ../");
+    exit();
+}
+include '../templates/assignment.php';

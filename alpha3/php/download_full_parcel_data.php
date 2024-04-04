@@ -2,7 +2,13 @@
 // This file is supposed to be called from the download button in the read.php file.
 // It will download the full parcel data as a CSV file.
 // The file will be named "full_parcel_data.csv".
-include "../config.php";
+session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: ../");
+    exit();
+}
+$conn_params = $_SESSION['conn_params'];
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if ($conn->connect_error) {
@@ -36,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                  LEFT JOIN company c on ol.id_company = c.id;";
 
     $data = $conn->query($sql_data);
-    $conn->close();
 
     $file = fopen("../output/full_parcel_data.csv", "w");
 

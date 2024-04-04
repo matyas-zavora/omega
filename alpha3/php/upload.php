@@ -1,6 +1,12 @@
 <?php
-include '../config.php';
-include '../templates/upload.html';
+session_start();
+if (!isset($_SESSION['email'])) {
+    header("Location: ../");
+    exit();
+}
+$conn_params = $_SESSION['conn_params'];
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
+include '../templates/upload.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $target_dir = "../input/";

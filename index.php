@@ -12,10 +12,15 @@ session_start();
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
     <link rel="manifest" href="img/favicon/site.webmanifest">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="./styles/font.css">
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg fixed-top bg" id="navbar">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="./img/me.png" alt="Logo" width="30" height="30" class="me-2">
@@ -28,38 +33,42 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
+                    <button id="switch" class="btn nav-link" onclick="cycleThemes()">Switch</button>
+                <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#projects">Projects</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#experience">Experience</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#education">Education</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
-
 <?php
 if (isset($_GET['status'])) {
+    echo '<div class="alert alert-success text-center" role="alert">';
     switch ($_GET['status']) {
         case 'db_deleted':
-            echo '<div class="alert alert-success text-center" role="alert">
-                    <h4 class="alert-heading">Database was deleted successfully.</h4>
-                  </div>';
+            echo '<h4 class="alert-heading">Database was deleted successfully.</h4>';
             break;
         case 'conn_deleted':
-            echo '<div class="alert alert-success text-center" role="alert">
-                    <h4 class="alert-heading">Saved database connection was deleted successfully.</h4>
-                  </div>';
+            echo '<h4 class="alert-heading">Saved database connection was deleted successfully.</h4>';
             break;
     }
+    echo '</div>';
 }
 ?>
-
-<header class="jumbotron text-center">
+<header class="jumbotron text-center mt-4">
     <h1>Hi 👋, I'm <a href="https://www.linkedin.com/in/matyas-zavora/">Matyáš</a></h1>
-    <p>A passionate full-stack developer from Czechia and this is my portfolio</p>
+    <p>A passionate full-stack developer from 🇨🇿 and this is my portfolio</p>
 </header>
-
 <div class="container">
     <div class="row">
         <div class="col-lg-8 mb-4">
@@ -67,10 +76,9 @@ if (isset($_GET['status'])) {
                 <div class="card-body">
                     <h5 class="card-title">Random Facts</h5>
                     <ul class="card-text list-unstyled">
-                        <li>🕹️ I like <a href="https://ggapp.io/zavoram/collection" target="_blank">videogames</a></li>
                         <li>🏥 I had a broken leg once</li>
                         <li>👪 I have two siblings and both are younger</li>
-                        <li>🚗 I have a B driver's licence</li>
+                        <li>🚗 I have a driver's licence</li>
                     </ul>
                 </div>
             </div>
@@ -80,15 +88,14 @@ if (isset($_GET['status'])) {
                 <div class="card-body">
                     <h5 class="card-title">Contact Me</h5>
                     <ul class="list-unstyled">
-                        <li>Email: matyaszavora@outlook.com</li>
-                        <li>Phone: +420 604 529 232</li>
+                        <li>Email: <a href="mailto: matyaszavora@outlook.com">matyaszavora@outlook.com</a></li>
+                        <li>Phone: <a href="tel:+420604529232">+420 604 529 232</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div class="container" id="projects">
     <h2 class="text-center mb-4">Projects</h2>
     <div class="row">
@@ -97,7 +104,7 @@ if (isset($_GET['status'])) {
                 <div class="card-body">
                     <div class="row mb-2">
                         <img src="alpha2/img/favicon/android-chrome-512x512.png" class="card-img-top img-fluid"
-                             alt="Project 1" style="width: 5rem;">
+                             alt="Project 1" style="height: 5rem; width: auto;">
                         <div class="col">
                             <h5 class="card-title">Alpha 2</h5>
                             <p class="card-text">File shortener</p>
@@ -125,7 +132,7 @@ if (isset($_GET['status'])) {
                 <div class="card-body">
                     <div class="row mb-2">
                         <img src="alpha3/img/favicon/android-chrome-512x512.png" class="card-img-top img-fluid"
-                             alt="Project 1" style="width: 5rem;">
+                             alt="Project 1" style="height: 5rem; width: auto;">
                         <div class="col">
                             <h5 class="card-title">Alpha 3</h5>
                             <p class="card-text">Database project</p>
@@ -153,9 +160,37 @@ if (isset($_GET['status'])) {
                 </div>
             </div>
         </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <img src="./img/light.png" style="height: 5rem; width: auto;" class="card-img-top img-fluid"
+                             alt="mojerande logo" id="mojerande-logo">
+                        <div class="col">
+                            <h5>Moje Rande</h5>
+                            <p class="card-text">Backend for dating app</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse"
+                            data-bs-target="#project3Collapse" aria-expanded="false" aria-controls="project3Collapse">
+                        Details
+                    </button>
+                    <a href="http://s-zavora-mojerande.dev.spsejecna.net/" class="btn btn-success">View project</a>
+                    <a href="https://github.com/prochyxd/mojerande" class="btn btn-secondary" target="_blank">GitHub
+                        Repo</a>
+                </div>
+                <div class="collapse" id="project3Collapse">
+                    <div class="card card-body">
+                        This application is used to find a suitable partner for the user.
+                        The user can create a profile where he fills in his personal data and can then browse the profil
+                        es of other users. If he likes a profile, he can invite that person on a date and chat with them
+                        afterward.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 <div class="container" id="experience">
     <h2 class="text-center mb-4">Experience</h2>
     <div class="row">
@@ -200,24 +235,20 @@ if (isset($_GET['status'])) {
                 </div>
             </div>
         </div>
-
-
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col">
                             <h5 class="card-title">Internship</h5>
-                            <p class="card-text"><a href="https://stavbymostu.vinci-construction.cz/en"
-                                                    target="_blank">SMP
+                            <p class="card-text"><a href="https://stavbymostu.vinci-construction.cz/en" target="_blank">SMP
                                     CZ</a></p>
                             <p class="card-text">May 2022</p>
                             <p class="card-text">Virtual machines and Linux servers</p>
                         </div>
                         <div class="col">
                             <a href="https://stavbymostu.vinci-construction.cz/en" target="_blank"><img
-                                        alt="smp logo"
-                                        class="card-img-top img-fluid"
+                                        alt="smp logo" class="card-img-top img-fluid"
                                         src="https://stavbymostu.vinci-construction.cz/files/sm-cut.svg"
                                         style="max-width: 100%; height: auto;"></a>
                         </div>
@@ -227,7 +258,6 @@ if (isset($_GET['status'])) {
         </div>
     </div>
 </div>
-
 <div class="container" id="education">
     <h2 class="text-center mb-4">Education</h2>
     <div class="row">
@@ -242,10 +272,9 @@ if (isset($_GET['status'])) {
                         </div>
                         <div class="col">
                             <a href="https://www.spsejecna.cz" target="_blank"><img
-                                        alt="spse logo"
-                                        class="card-img-top img-fluid"
+                                        alt="spse logo" class="card-img-top img-fluid inverted-logo"
                                         src="https://www.spsejecna.cz/ci/SPSE-Jecna_Logotyp_Cernobily.svg"
-                                        style="max-width: 100%; height: auto;"></a>
+                                        style="max-width: 100%; height: auto;" id="jecna-logo"></a>
                         </div>
                     </div>
                 </div>
@@ -255,10 +284,10 @@ if (isset($_GET['status'])) {
 </div>
 <?php
 if (isset($_GET['status'])) {
-echo '<script> setTimeout(() => { window.location.href = "./index.php"; }, 2000); </script>';
+    echo '<script> setTimeout(() => { window.location.href = "./index.php"; }, 2000); </script>';
 }
 ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./scripts/dark-mode.js"></script>
 </body>
 </html>
-

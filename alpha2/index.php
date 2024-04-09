@@ -58,5 +58,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Include the HTML template
-include './templates/index.html';
+// Include the template
+include './templates/index.php';

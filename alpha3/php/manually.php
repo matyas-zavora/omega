@@ -13,10 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tableName = $_POST['table'] ?? '';
         switch ($tableName) {
             case 'company':
-                include "../templates/write/company.html";
+                include "../templates/write/company.php";
                 break;
             case 'owner':
-                include "../templates/write/owner.html";
+                include "../templates/write/owner.php";
                 break;
             case 'ownership_list':
                 $parcels = $conn->query("SELECT id, number FROM parcel");
@@ -49,14 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     displayMessage("Error: All parcels are fully owned", "danger");
                     break;
                 } else {
-                    include "../templates/write/ownership_list.html";
+                    include "../templates/write/ownership_list.php";
                     break;
                 }
             case 'parcel':
-                include "../templates/write/parcel.html";
+                include "../templates/write/parcel.php";
                 break;
             case 'user':
-                include "../templates/write/user.html";
+                include "../templates/write/user.php";
                 break;
         }
     } else {

@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +18,7 @@ session_start();
     <link rel="stylesheet" href="./styles/font.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg fixed-top bg" id="navbar">
+<nav class="navbar navbar-expand-lg bg" id="navbar">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="#">
             <img src="./img/me.png" alt="Logo" width="30" height="30" class="me-2">
@@ -99,7 +97,7 @@ if (isset($_GET['status'])) {
 <div class="container" id="projects">
     <h2 class="text-center mb-4">Projects</h2>
     <div class="row">
-        <div class="col-lg-4 mb-4">
+        <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
@@ -127,7 +125,7 @@ if (isset($_GET['status'])) {
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-4">
+        <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
@@ -160,7 +158,7 @@ if (isset($_GET['status'])) {
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-4">
+        <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
@@ -189,6 +187,32 @@ if (isset($_GET['status'])) {
                 </div>
             </div>
         </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <img src="./shoppinglist/img/favicon/android-chrome-512x512.png" class="card-img-top img-fluid"
+                             alt="Project 1" style="height: 5rem; width: auto;">
+                        <div class="col">
+                            <h5 class="card-title">Shopping list</h5>
+                            <p class="card-text">A simple shopping list app</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="collapse"
+                            data-bs-target="#project4Collapse" aria-expanded="false" aria-controls="project4Collapse">
+                        Details
+                    </button>
+                    <a href="./shoppinglist" class="btn btn-success">View Project</a>
+                </div>
+                <div class="collapse" id="project4Collapse">
+                    <div class="card card-body">
+                        Shopping list website that allows the user to add, remove and edit items on the list. The
+                        processing is done by a backend written in php. The website is written in html, css and
+                        javascript.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container" id="experience">
@@ -205,10 +229,7 @@ if (isset($_GET['status'])) {
                             <p class="card-text">Nette, a PHP framework</p>
                         </div>
                         <div class="col">
-                            <a href="https://omnicado.com/" target="_blank"><img
-                                        src="https://upgates.s60.cdn-upgates.com/_cache/2/c/2c9b94e3c0251cb7e0fc01f306f4e660-omnicado-logo-lightmode-lukas-hunka.png"
-                                        class="card-img-top img-fluid" alt="Omnicado logo"
-                                        style="max-width: 100%; height: auto;"></a>
+                            <a href="https://omnicado.com/" target="_blank"><img src="https://upgates.s60.cdn-upgates.com/_cache/2/c/2c9b94e3c0251cb7e0fc01f306f4e660-omnicado-logo-lightmode-lukas-hunka.png" class="card-img-top img-fluid" alt="Omnicado logo" style="max-width: 100%; height: auto;"></a>
                         </div>
                     </div>
                 </div>
@@ -227,9 +248,7 @@ if (isset($_GET['status'])) {
                         </div>
                         <div class="col">
                             <a href="https://www.vinci-construction.cz/en"><img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Vinci_%28Unternehmen%29_logo.svg/1200px-Vinci_%28Unternehmen%29_logo.svg.png"
-                                        class="card-img-top img-fluid" alt="Vinci logo"
-                                        style="max-width: 100%; max-height: 100px; height: auto;"></a>
+                                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Vinci_%28Unternehmen%29_logo.svg/1200px-Vinci_%28Unternehmen%29_logo.svg.png" class="card-img-top img-fluid" alt="Vinci logo" style="max-width: 100%; max-height: 100px; height: auto;"></a>
                         </div>
                     </div>
                 </div>
@@ -271,10 +290,7 @@ if (isset($_GET['status'])) {
                             <p class="card-text">May 2024 (Wish me luck!)</p>
                         </div>
                         <div class="col">
-                            <a href="https://www.spsejecna.cz" target="_blank"><img
-                                        alt="spse logo" class="card-img-top img-fluid inverted-logo"
-                                        src="https://www.spsejecna.cz/ci/SPSE-Jecna_Logotyp_Cernobily.svg"
-                                        style="max-width: 100%; height: auto;" id="jecna-logo"></a>
+                            <a href="https://www.spsejecna.cz" target="_blank"><img alt="spse logo" class="card-img-top img-fluid inverted-logo" src="https://www.spsejecna.cz/ci/SPSE-Jecna_Logotyp_Cernobily.svg" style="max-width: 100%; height: auto;" id="jecna-logo"></a>
                         </div>
                     </div>
                 </div>

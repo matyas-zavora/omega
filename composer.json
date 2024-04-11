@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "phpunitgen/console": "^6.1"
+    }
+}

@@ -112,7 +112,7 @@ if (isset($_GET['status'])) {
                             data-bs-target="#project1Collapse" aria-expanded="false" aria-controls="project1Collapse">
                         Details
                     </button>
-                    <a href="./alpha2" class="btn btn-success">View Project</a>
+                    <a href="./alpha2" class="btn btn-success" target="_blank">View Project</a>
                     <a href="https://github.com/matyas-zavora/aplha-2" class="btn btn-secondary" target="_blank">GitHub
                         Repo</a>
                 </div>
@@ -140,7 +140,7 @@ if (isset($_GET['status'])) {
                             data-bs-target="#project2Collapse" aria-expanded="false" aria-controls="project2Collapse">
                         Details
                     </button>
-                    <a href="./info.php" class="btn btn-success">View project</a>
+                    <a href="./info.php" class="btn btn-success" target="_blank">View project</a>
                     <a href="https://github.com/matyas-zavora/aplha-3" class="btn btn-secondary" target="_blank">GitHub
                         Repo</a>
                     <?php if (isset($_SESSION['conn_params'])): ?>
@@ -173,7 +173,8 @@ if (isset($_GET['status'])) {
                             data-bs-target="#project3Collapse" aria-expanded="false" aria-controls="project3Collapse">
                         Details
                     </button>
-                    <a href="http://s-zavora-mojerande.dev.spsejecna.net/" class="btn btn-success">View project</a>
+                    <a href="http://s-zavora-mojerande.dev.spsejecna.net/" class="btn btn-success" target="_blank">View
+                        project</a>
                     <a href="https://github.com/prochyxd/mojerande" class="btn btn-secondary" target="_blank">GitHub
                         Repo</a>
                 </div>
@@ -202,7 +203,7 @@ if (isset($_GET['status'])) {
                             data-bs-target="#project4Collapse" aria-expanded="false" aria-controls="project4Collapse">
                         Details
                     </button>
-                    <a href="./shoppinglist" class="btn btn-success">View Project</a>
+                    <a href="./shoppinglist" class="btn btn-success" target="_blank">View Project</a>
                 </div>
                 <div class="collapse" id="project4Collapse">
                     <div class="card card-body">
@@ -229,7 +230,10 @@ if (isset($_GET['status'])) {
                             <p class="card-text">Nette, a PHP framework</p>
                         </div>
                         <div class="col">
-                            <a href="https://omnicado.com/" target="_blank"><img src="https://upgates.s60.cdn-upgates.com/_cache/2/c/2c9b94e3c0251cb7e0fc01f306f4e660-omnicado-logo-lightmode-lukas-hunka.png" class="card-img-top img-fluid" alt="Omnicado logo" style="max-width: 100%; height: auto;"></a>
+                            <a href="https://omnicado.com/" target="_blank"><img
+                                        src="https://upgates.s60.cdn-upgates.com/_cache/2/c/2c9b94e3c0251cb7e0fc01f306f4e660-omnicado-logo-lightmode-lukas-hunka.png"
+                                        class="card-img-top img-fluid" alt="Omnicado logo"
+                                        style="max-width: 100%; height: auto;"></a>
                         </div>
                     </div>
                 </div>
@@ -248,7 +252,9 @@ if (isset($_GET['status'])) {
                         </div>
                         <div class="col">
                             <a href="https://www.vinci-construction.cz/en"><img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Vinci_%28Unternehmen%29_logo.svg/1200px-Vinci_%28Unternehmen%29_logo.svg.png" class="card-img-top img-fluid" alt="Vinci logo" style="max-width: 100%; max-height: 100px; height: auto;"></a>
+                                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Vinci_%28Unternehmen%29_logo.svg/1200px-Vinci_%28Unternehmen%29_logo.svg.png"
+                                        class="card-img-top img-fluid" alt="Vinci logo"
+                                        style="max-width: 100%; max-height: 100px; height: auto;"></a>
                         </div>
                     </div>
                 </div>
@@ -290,7 +296,11 @@ if (isset($_GET['status'])) {
                             <p class="card-text">May 2024 (Wish me luck!)</p>
                         </div>
                         <div class="col">
-                            <a href="https://www.spsejecna.cz" target="_blank"><img alt="spse logo" class="card-img-top img-fluid inverted-logo" src="https://www.spsejecna.cz/ci/SPSE-Jecna_Logotyp_Cernobily.svg" style="max-width: 100%; height: auto;" id="jecna-logo"></a>
+                            <a href="https://www.spsejecna.cz" target="_blank"><img alt="spse logo"
+                                                                                    class="card-img-top img-fluid inverted-logo"
+                                                                                    src="https://www.spsejecna.cz/ci/SPSE-Jecna_Logotyp_Cernobily.svg"
+                                                                                    style="max-width: 100%; height: auto;"
+                                                                                    id="jecna-logo"></a>
                         </div>
                     </div>
                 </div>

@@ -1,80 +1,147 @@
 <?php
 //show errors
 ini_set('display_errors', 1);
-
-session_start();
-if (isset($_SESSION['conn_params'])) {
-    header("Location: ./estateatlas/index.php");
+if (!isset($_GET['tool'])){
+    header('Location: index.php');
     exit();
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $host = filter_input(INPUT_POST, 'host', FILTER_SANITIZE_STRING);
-    $user = filter_input(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
-    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-    $port = filter_input(INPUT_POST, 'port', FILTER_SANITIZE_NUMBER_INT);
-    $conn = new mysqli($host, $user, $password, null, $port);
+include('./database_checker.php');
+try {
+$connection->select_db($_GET['tool']);
+} catch (Exception $e){
+    if ($_GET['tool'] == 'listease'){
+        createDatabaseListEase($connection);
+    }
+    else if ($_GET['tool'] == 'estateatlas'){
+        createDatabaseEstateAtlas($connection);
+    }
+    exit();
+}
 
-    if (!$conn->connect_error) {
-        $conn_params = array();
-        $conn_params['host'] = $host;
-        $conn_params['user'] = $user;
-        $conn_params['password'] = $password;
-        $conn_params['port'] = $port;
-        $_SESSION['conn_params'] = $conn_params;
-        createDatabaseA3($conn);
-        header('Location: ./estateatlas/index.php');
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $host = $_POST['host'];
+    $user = $_POST['user'];
+    $password = $_POST['password'];
+    $port = $_POST['port'];
+    try {
+        $connection = new mysqli($host, $user, $password, '', $port);
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+    if (!isset($error)) {
+        $data = json_encode([
+            'host' => $host,
+            'user' => $user,
+            'password' => $password,
+            'port' => $port
+        ]);
+        $file = fopen('../connection.txt', 'w');
+        fwrite($file, $data);
+        fclose($file);
+        try{
+            $connection->select_db($_GET['tool']);
+        } catch (Exception $e){
+            if ($_GET['tool'] == 'listease'){
+                CreateDatabaseListEase($connection);
+            }
+            else if ($_GET['tool'] == 'estateatlas'){
+                createDatabaseEstateAtlas($connection);
+            }
+            exit();
+        }
+        header("Location: ./". $_GET['tool']);
         exit();
     }
 }
-
-/**
- * Creates the database estateatlas with the tables company, log, owner, ownership_list, parcel, user
- * @param mysqli $conn MySQL Database connection
- * @return void
- */
-
-echo '<!doctype html>';
-echo '<html lang="en">';
-echo '<head>';
-    echo '<meta charset="UTF-8">';
-    echo '<meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">';
-    echo '<meta http-equiv="X-UA-Compatible" content="ie=edge">';
-    echo '<title>Document</title>';
-    echo '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">';
-echo '</head>';
-echo '<body>';
-
-if (isset($conn) and $conn->connect_error){
-    echo '<div class="alert alert-danger" role="alert">';
-        echo $conn->connect_error;
-    echo '</div>';
-}
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Database connection</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="apple-touch-icon" sizes="180x180" href="./img/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon/favicon-16x16.png">
+        <link rel="manifest" href="./img/favicon/site.webmanifest">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet" href="styles/font.css">
+    </head>
+    <body>
+<?php
+if (isset($error)) echo '<div class="alert alert-danger text-center" role="alert">MySQL Error: ' . $error . '</div>';
 echo '<header class="jumbotron text-center mt-lg-5">';
-    echo '<h1 class="text-center">Enter your MySQL database credentials</h1>';
+echo '<h1 class="text-center">Enter your MySQL database credentials</h1>';
 echo '</header>';
-echo '<form action="info.php" method="post" class="container mt-5">';
-    echo '<div class="mb-3">';
-        echo '<label for="host" class="form-label">Host</label>';
-        echo '<input type="text" class="form-control" id="host" name="host" value="localhost">';
-    echo '</div>';
-    echo '<div class="mb-3">';
-        echo '<label for="user" class="form-label">User</label>';
-        echo '<input type="text" class="form-control" id="user" name="user" value="root">';
-    echo '</div>';
-    echo '<div class="mb-3">';
-        echo '<label for="password" class="form-label">Password</label>';
-        echo '<input type="password" class="form-control" id="password" name="password">';
-    echo '</div>';
-    echo '<div class="mb-3">';
-        echo '<label for="port" class="form-label">Port</label>';
-        echo '<input type="number" class="form-control" id="port" name="port" value="3306">';
-    echo '</div>';
-    echo '<button type="submit" class="btn btn-primary">Submit</button>';
-echo '</body>';
-echo '</html>';
+echo '<form method="post" class="container mt-5">';
+echo '<div class="mb-3">';
+echo '<label for="host" class="form-label">Host</label>';
+if (isset($error) && strpos($error, 'php_network_getaddresses') !== false) {
+    echo '<input type="text" class="form-control is-invalid" id="host" required name="host" value="' . $_POST['host'] . '">';
+    echo '<div class="invalid-feedback">Invalid host</div>';
+} else {
+    echo '<input type="text" class="form-control" id="host" name="host" required value="localhost">';
+}
+echo '</div>';
+echo '<div class="mb-3">';
+echo '<label for="user" class="form-label">User</label>';
+if (isset($error) && strpos($error, 'Access denied') !== false) {
+    echo '<input type="text" class="form-control is-invalid" id="user" name="user" required value="' . $_POST['user'] . '">';
+} else {
+    echo '<input type="text" class="form-control" id="user" name="user" value="root" required>';
+}
+echo '</div>';
+echo '<div class="mb-3">';
+echo '<label for="password" class="form-label">Password</label>';
+if (isset($error) && strpos($error, 'Access denied') !== false) {
+    echo '<input type="password" class="form-control is-invalid" id="password" name="password">';
+    echo '<div class="invalid-feedback">Access denied for user ' . $user . '</div>';
+} else {
+    echo '<input type="password" class="form-control" id="password" name="password">';
+}
+echo '</div>';
+echo '<div class="mb-3">';
+echo '<label for="port" class="form-label">Port</label>';
+echo '<input type="number" class="form-control" id="port" name="port" value="3306">';
+echo '</div>';
+echo '<button type="submit" class="btn btn-primary">Submit</button>';
 
-function createDatabaseA3(mysqli $conn)
+function createDatabaseListEase(mysqli $conn): void
+{
+    try {
+        $sql = 'DROP DATABASE `shoppinglist`';
+        $conn->query($sql);
+    } catch (Exception $e) {
+    }
+    $sql = 'CREATE DATABASE `shoppinglist` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;';
+    $conn->query($sql);
+    $sql = 'USE `shoppinglist`;';
+    $conn->query($sql);
+    $sql = 'CREATE TABLE IF NOT EXISTS `items` (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `name` varchar(100) NOT NULL,
+              `quantity` int DEFAULT NULL,
+              `price` float(10,2) DEFAULT NULL,
+              `user_id` int NOT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
+    $conn->query($sql);
+    $sql = 'CREATE TABLE IF NOT EXISTS `users` (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `email` varchar(100) NOT NULL,
+              `psw` varchar(100) NOT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `email` (`email`)
+            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
+    $conn->query($sql);
+}
+
+function createDatabaseEstateAtlas(mysqli $conn): void
 {
     $conn->query("SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';");
     $conn->query("START TRANSACTION;");
@@ -143,7 +210,7 @@ function createDatabaseA3(mysqli $conn)
     $conn->query("TRUNCATE TABLE `company`;");
 
     $conn->query("INSERT INTO `user` (`id`, `email`, `password`) VALUES
-                        (1, 'admin@admin.com', '$2y$10$4bR87TXTrpf1uHj7UbbHIenGaIQkFz5HE2WuijQ6pISCxsZ8eVdlK');");
+                        (1, 'admin@admin.com', '$2y$10$iKO0idnCIiU.tCkrNMjiEOgODufKIRxgqOoBo4Co6DnNq174Q6ZAm');");
 
     $conn->query("INSERT INTO `company` (`id`, `name`, `address`, `zip`, `city`, `country`) VALUES
                         (1, 'Company B', '456 Oak St', 56789, 'City B', 'CA'),

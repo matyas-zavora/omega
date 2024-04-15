@@ -10,8 +10,6 @@ function setTheme(themeName) {
         document.documentElement.setAttribute('data-bs-theme', 'light');
         document.body.classList.remove('bg-dark');
         document.body.classList.add('bg-light');
-        document.getElementById('jecna-logo').classList.remove('inverted-logo');
-        document.getElementById('mojerande-logo').src = './img/light.png';
         document.getElementById('navbar').classList.remove('bg-dark');
         document.getElementById('navbar').classList.add('bg-light');
     } else if (themeName === 'theme-device') {
@@ -34,8 +32,6 @@ function setTheme(themeName) {
             document.documentElement.setAttribute('data-bs-theme', 'light');
             document.body.classList.remove('bg-dark');
             document.body.classList.add('bg-light');
-            document.getElementById('jecna-logo').classList.remove('inverted-logo');
-            document.getElementById('mojerande-logo').src = './img/light.png';
             document.getElementById('navbar').classList.remove('bg-dark');
             document.getElementById('navbar').classList.add('bg-light');
         }
@@ -50,8 +46,6 @@ function setDark(){
     document.documentElement.setAttribute('data-bs-theme', 'dark');
     document.body.classList.remove('bg-light');
     document.body.classList.add('bg-dark');
-    document.getElementById('jecna-logo').classList.add('inverted-logo');
-    document.getElementById('mojerande-logo').src = './img/dark.png';
     document.getElementById('navbar').classList.remove('bg-light');
     document.getElementById('navbar').classList.add('bg-dark');
 }

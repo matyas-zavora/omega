@@ -4,6 +4,7 @@
     <option name="directories">
       <list>
         <option value="$PROJECT_DIR$/alpha2/tests" />
+        <option value="$PROJECT_DIR$/trimify/tests" />
       </list>
     </option>
   </component>

@@ -1,36 +1,9 @@
 <?php
 session_start();
-//show errors
-ini_set('display_errors', 1);
 
-$file = fopen('../connection.txt', 'r');
-if (!$file) header('Location: connect.php');
+include('../database_checker.php');
 if (!isset($_SESSION['email'])) header('Location: login.php');
 
-$data = fread($file, filesize('../connection.txt'));
-fclose($file);
-$connectionData = json_decode($data, true);
-if ($connectionData) {
-    $host = $connectionData['host'];
-    $user = $connectionData['user'];
-    $password = $connectionData['password'];
-    $port = $connectionData['port'];
-    $id = $_SESSION['id'];
-    $connection = new mysqli($host, $user, $password, 'shoppinglist', $port);
-    if ($connection->connect_error) {
-        unlink('../connection.txt');
-        header('Location: connect.php');
-    } else {
-        $items = $connection->query("SELECT * FROM items WHERE user_id = '$id' ORDER BY id DESC");
-        $itemsArray = [];
-        while ($item = $items->fetch_assoc()) {
-            $itemsArray[] = $item;
-        }
-    }
-} else {
-    header('Location: connect.php');
-    exit();
-}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item = $_POST['item-name'];
     $connection->query("INSERT INTO items (name, user_id) VALUES ('$item', '$id')");
@@ -213,36 +186,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="../scripts/dark-mode.js"></script>
     </body>
     </html>
-<?php
-function searchImage($productName, $apiKey)
-{
-    $url = "https://pixabay.com/api/";
-    $params = [
-        "key" => $apiKey,
-        "q" => urlencode($productName),
-        "image_type" => "photo",
-        "per_page" => 1
-    ];
-
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url . '?' . http_build_query($params),
-        CURLOPT_RETURNTRANSFER => true
-    ]);
-
-    $response = curl_exec($curl);
-    $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-    if ($statusCode == 200) {
-        $data = json_decode($response, true);
-        if (!empty($data['hits'])) {
-            return $data['hits'][0]['largeImageURL'];
-        } else {
-            return "No images found for this product";
-        }
-    } else {
-        return "Error: $statusCode";
-    }
-
-    curl_close($curl);
-}

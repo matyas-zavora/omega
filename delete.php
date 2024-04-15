@@ -10,7 +10,7 @@ if (!isset($_GET['todo']) or !isset($_SESSION['conn_params'])) {
         case 'db':
             $conn_params = $_SESSION['conn_params'];
             $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
-            $conn->query("drop schema if exists alpha3;");
+            $conn->query("drop schema if exists estateatlas;");
             unset($_SESSION['conn_params']);
             unset($_SESSION['email']);
             header('Location: ./index.php?status=db_deleted');

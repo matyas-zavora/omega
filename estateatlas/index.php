@@ -1,8 +1,5 @@
 <?php
 session_start();
-//show errors
-ini_set('display_errors', 1);
-//Load connection data from connection.txt
 include('../database_checker.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
@@ -40,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="./styles/font.css">
-    <title>Shopping list - login</title>
+    <title>EstateAtlas - login</title>
 </head>
 <body>
 <div class="container">
@@ -51,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="login.php" method="post">
+            <form action="./login.php" method="post">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" class="form-control" id="email" name="email">
@@ -61,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="password" class="form-control" id="password" name="password">
                 </div>
                 <button type="submit" class="btn btn-success">Login</button>
-                <a class="btn btn-info" href="register.php">Register</a>
+                <a class="btn btn-info" href="./register.php">Register</a>
             </form>
         </div>
     </div>

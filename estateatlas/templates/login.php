@@ -1,8 +1,5 @@
 <?php
 session_start();
-//show errors
-ini_set('display_errors', 1);
-//Load connection data from connection.txt
 include('../database_checker.php');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];

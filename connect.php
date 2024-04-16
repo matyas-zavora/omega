@@ -44,6 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit();
         }
+        $_SESSION['conn_params'] = [
+            'host' => $host,
+            'user' => $user,
+            'password' => $password,
+            'port' => $port
+        ];
         header("Location: ./" . $_GET['tool']);
         exit();
     }

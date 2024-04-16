@@ -1,14 +1,17 @@
 <?php
+//show errors
+ini_set('display_errors', 1);
 session_start();
 include('../database_checker.php');
+$connection->select_db('estateatlas');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $sql = "SELECT id,psw FROM users WHERE email = '$email'";
+    $sql = "SELECT id,password FROM user WHERE email = '$email'";
     $result = $connection->query($sql);
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        if (password_verify($password, $row['psw'])) {
+        if (password_verify($password, $row['password'])) {
             $_SESSION['email'] = $email;
             $_SESSION['id'] = $row['id'];
             header('Location: index.php');

@@ -1,10 +1,7 @@
 <?php
-echo "database tested";
-//show errors
-ini_set('display_errors', 1);
 $database_connected = false;
 $file_location = __DIR__ . "/connection.txt";
-if (file_exists($file_location)) {
+if (file_exists($file_location) && !isset($_SESSION['conn_params'])) {
     $file = fopen($file_location, 'r');
     $conn_params = fread($file, filesize($file_location));
     fclose($file);
@@ -20,6 +17,7 @@ if (file_exists($file_location)) {
     }
     if (!isset($connection->connect_error)) {
         $database_connected = true;
+        $_SESSION['conn_params'] = $conn_params;
     }
     if (isset($_GET['tool'])){
         $connection->select_db($_GET['tool']);
@@ -27,5 +25,13 @@ if (file_exists($file_location)) {
     if (isset($relocate) && $relocate) {
         header('Location: index.php');
         exit();
+    }
+}
+if (isset($_SESSION['conn_params'])) {
+    try {
+        $connection = new mysqli($_SESSION['conn_params']['host'], $_SESSION['conn_params']['user'], $_SESSION['conn_params']['password'], '', $_SESSION['conn_params']['port']);
+    } catch (Exception $e) {
+        unset($_SESSION['conn_params']);
+        $database_connected = false;
     }
 }

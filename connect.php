@@ -1,23 +1,15 @@
 <?php
 //show errors
 ini_set('display_errors', 1);
-if (!isset($_GET['tool'])){
+if (!isset($_GET['tool'])) {
     header('Location: index.php');
     exit();
 }
 include('./database_checker.php');
-try {
-$connection->select_db($_GET['tool']);
-} catch (Exception $e){
-    if ($_GET['tool'] == 'listease'){
-        createDatabaseListEase($connection);
-    }
-    else if ($_GET['tool'] == 'estateatlas'){
-        createDatabaseEstateAtlas($connection);
-    }
+if (isset($database_connected) && $database_connected) {
+    header('Location: ./' . $_GET['tool']);
     exit();
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $host = $_POST['host'];
     $user = $_POST['user'];
@@ -35,21 +27,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'password' => $password,
             'port' => $port
         ]);
-        $file = fopen('../connection.txt', 'w');
-        fwrite($file, $data);
-        fclose($file);
-        try{
+        try {
+            $file = fopen(__DIR__ . '/connection.txt', 'w');
+            fwrite($file, $data);
+            fclose($file);
+        } catch (TypeError $e) {
+            $error = $e->getMessage();
+        }
+        try {
             $connection->select_db($_GET['tool']);
-        } catch (Exception $e){
-            if ($_GET['tool'] == 'listease'){
+        } catch (Exception $e) {
+            if ($_GET['tool'] == 'listease') {
                 CreateDatabaseListEase($connection);
-            }
-            else if ($_GET['tool'] == 'estateatlas'){
+            } else if ($_GET['tool'] == 'estateatlas') {
                 createDatabaseEstateAtlas($connection);
             }
             exit();
         }
-        header("Location: ./". $_GET['tool']);
+        header("Location: ./" . $_GET['tool']);
         exit();
     }
 }
@@ -74,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </head>
     <body>
 <?php
-if (isset($error)) echo '<div class="alert alert-danger text-center" role="alert">MySQL Error: ' . $error . '</div>';
+if (isset($error)) echo '<div class="alert alert-danger text-center" role="alert">Error: ' . $error . '</div>';
 echo '<header class="jumbotron text-center mt-lg-5">';
 echo '<h1 class="text-center">Enter your MySQL database credentials</h1>';
 echo '</header>';
@@ -114,13 +109,13 @@ echo '<button type="submit" class="btn btn-primary">Submit</button>';
 function createDatabaseListEase(mysqli $conn): void
 {
     try {
-        $sql = 'DROP DATABASE `shoppinglist`';
+        $sql = 'DROP DATABASE `listease`';
         $conn->query($sql);
     } catch (Exception $e) {
     }
-    $sql = 'CREATE DATABASE `shoppinglist` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;';
+    $sql = 'CREATE DATABASE `listease` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;';
     $conn->query($sql);
-    $sql = 'USE `shoppinglist`;';
+    $sql = 'USE `listease`;';
     $conn->query($sql);
     $sql = 'CREATE TABLE IF NOT EXISTS `items` (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -209,8 +204,8 @@ function createDatabaseEstateAtlas(mysqli $conn): void
     $conn->query("TRUNCATE TABLE `log`;");
     $conn->query("TRUNCATE TABLE `company`;");
 
-    $conn->query("INSERT INTO `user` (`id`, `email`, `password`) VALUES
-                        (1, 'admin@admin.com', '$2y$10$iKO0idnCIiU.tCkrNMjiEOgODufKIRxgqOoBo4Co6DnNq174Q6ZAm');");
+    $conn->query('INSERT INTO `user` (`id`, `email`, `password`) VALUES
+                        (1, `admin@admin.com`, `$2y$10$iKO0idnCIiU.tCkrNMjiEOgODufKIRxgqOoBo4Co6DnNq174Q6ZAm`);');
 
     $conn->query("INSERT INTO `company` (`id`, `name`, `address`, `zip`, `city`, `country`) VALUES
                         (1, 'Company B', '456 Oak St', 56789, 'City B', 'CA'),

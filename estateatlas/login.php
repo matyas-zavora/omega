@@ -1,9 +1,9 @@
 <?php
 session_start();
-if($_SERVER['REQUEST_METHOD'] === 'POST') {
+include('../database_checker.php');
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $connection = new mysqli('localhost', 'root', '', 'shoppinglist');
     $sql = "SELECT id,psw FROM users WHERE email = '$email'";
     $result = $connection->query($sql);
     if ($result->num_rows > 0) {
@@ -19,7 +19,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,19 +37,18 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="./styles/font.css">
-    <title>Shopping list - Registration</title>
+    <title>EstateAtlas - login</title>
 </head>
 <body>
-<!-- Registration form -->
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1 class="text-center">Registration</h1>
+            <h1 class="text-center">Login</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="register.php" method="post">
+            <form action="./login.php" method="post">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" class="form-control" id="email" name="email">
@@ -58,11 +57,10 @@ if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password">
                 </div>
-                <button type="submit" class="btn btn-success">Register</button>
-                <a class="btn btn-info" href="login.php">Login</a>
+                <button type="submit" class="btn btn-success">Login</button>
+                <a class="btn btn-info" href="./register.php">Register</a>
             </form>
         </div>
     </div>
 </div>
 </body>
-</html>

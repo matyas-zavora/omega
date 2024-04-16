@@ -1,5 +1,4 @@
 <?php
-
 //Get connection from connection.txt
 $file = fopen('connection.txt', 'r');
 if (!$file) header('Location: connect.php');
@@ -11,7 +10,7 @@ if ($conn_params) {
     $user = $conn_params['user'];
     $password = $conn_params['password'];
     $port = $conn_params['port'];
-    $connection = new mysqli($host, $user, $password, 'shoppinglist', $port);
+    $connection = new mysqli($host, $user, $password, 'listease', $port);
     if ($connection->connect_error) {
         unlink('connection.txt');
         header('Location: connect.php');
@@ -28,14 +27,14 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-//Check if the user wants to change the price
+//Check if the user wants to change the quantity
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
-    $price = $_POST['price'];
-    $sql = "UPDATE items SET price = $price WHERE id = $id";
+    $quantity = $_POST['quantity'];
+    $sql = "UPDATE items SET quantity = $quantity WHERE id = $id";
     $connection->query($sql);
     if ($connection->error) {
-        $_SESSION['error_message'] = 'Error updating price | ' . $connection->error;
+        $_SESSION['error_message'] = 'Error updating quantity | ' . $connection->error;
     }
 }
 header('Location: index.php');

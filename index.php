@@ -1,5 +1,5 @@
 <?php session_start();
-include ('database_checker.php');
+include('database_checker.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +133,7 @@ if (isset($_GET['status'])) {
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
-                        <img src="./shoppinglist/img/favicon/android-chrome-512x512.png" class="card-img-top img-fluid"
+                        <img src="listease/img/favicon/android-chrome-512x512.png" class="card-img-top img-fluid"
                              alt="Project 1" style="height: 5rem; width: auto;">
                         <div class="col">
                             <h5 class="card-title">ListEase</h5>
@@ -168,7 +168,6 @@ if ($database_connected) {
     echo '</div>';
     echo '</div>';
     echo '</div>';
-
 }
 ?>
 <?php

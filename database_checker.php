@@ -1,4 +1,7 @@
 <?php
+echo "database tested";
+//show errors
+ini_set('display_errors', 1);
 $database_connected = false;
 $file_location = __DIR__ . "/connection.txt";
 if (file_exists($file_location)) {
@@ -10,12 +13,16 @@ if (file_exists($file_location)) {
     $user = $conn_params['user'];
     $password = $conn_params['password'];
     $port = $conn_params['port'];
-
-    $connection = new mysqli($host, $user, $password, '', $port);
-    if ($connection->connect_error) {
+    try {
+        $connection = new mysqli($host, $user, $password, '', $port);
+    } catch (Exception $e) {
         unlink($file_location);
-    } else{
+    }
+    if (!isset($connection->connect_error)) {
         $database_connected = true;
+    }
+    if (isset($_GET['tool'])){
+        $connection->select_db($_GET['tool']);
     }
     if (isset($relocate) && $relocate) {
         header('Location: index.php');

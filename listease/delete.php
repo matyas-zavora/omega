@@ -11,7 +11,7 @@ if ($conn_params) {
     $user = $conn_params['user'];
     $password = $conn_params['password'];
     $port = $conn_params['port'];
-    $connection = new mysqli($host, $user, $password, 'shoppinglist', $port);
+    $connection = new mysqli($host, $user, $password, 'listease', $port);
     if ($connection->connect_error) {
         unlink('connection.txt');
         header('Location: connect.php');

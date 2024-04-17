@@ -13,7 +13,7 @@ $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['pas
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Alpha 3 | Read</title>
+    <title>EstateAtlas | Read</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">

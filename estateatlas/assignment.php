@@ -10,8 +10,10 @@ include '../templates/assignment.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Alpha - 3 | Assignment</title>
+    <title>EstateAtlas | Assignment</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
     <link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
@@ -80,9 +82,9 @@ include '../templates/assignment.php';
     </div>
     <div class="row btn-container">
         <div class="col-md-2 col-md-offset-5">
-            <a class="btn btn-primary" href="">Back</a>
+            <a class="btn btn-primary" href="./">Back</a>
+            <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
         </div>
-    </div>
-</div>
+<script src="../scripts/dark-mode.js"></script>
 </body>
 </html>

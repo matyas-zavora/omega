@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `estateatlas`
 --
-CREATE DATABASE IF NOT EXISTS `alpha3` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS `estateatlas` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `alpha3`;
 
 -- --------------------------------------------------------

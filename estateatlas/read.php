@@ -1,4 +1,6 @@
 <?php
+//show errors
+ini_set('display_errors', 1);
 session_start();
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
@@ -9,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Alpha 3 | Read</title>
+    <title>EstateAtlas | Read</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
@@ -35,12 +37,12 @@ if (!isset($_SESSION['email'])) {
             <option value="log">Log</option>
         </select>
         <button class="btn btn-primary" type="submit">Read</button>
-        <a class="btn btn-danger" href="">Return</a>
+        <a class="btn btn-danger" href="./">Return</a>
     </form>
 </div>
 <?php
 $conn_params = $_SESSION['conn_params'];
-$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], 'estateatlas', $conn_params['port']);
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -75,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql_user = "SELECT id FROM user WHERE email = '" . $_SESSION['email'] . "'";
     $id_user = $conn->query($sql_user)->fetch_assoc()['id'];
-    $sql_log = "INSERT INTO log (type, id_user, description) VALUES ('read', '" . $id_user . "', 'Read table " . $tableName . "')";
+    $sql_log = "INSERT INTO log (type, id_user, description) VALUES ('view', '" . $id_user . "', 'Read table " . $tableName . "')";
     $conn->query($sql_log);
 
     // SQL query based on the selected table

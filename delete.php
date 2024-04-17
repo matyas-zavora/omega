@@ -12,22 +12,12 @@ if (!isset($_GET['todo']) or !isset($_SESSION['conn_params'])) {
             $conn_params = $_SESSION['conn_params'];
             $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
             $conn->query("drop schema if exists estateatlas;");
-            unset($_SESSION['conn_params']);
-            unset($_SESSION['email']);
-            if (file_exists(__DIR__ . "/connection.txt")) {
-                unlink(__DIR__ . "/connection.txt");
-            }
             header('Location: ./index.php?status=success_EstateAtlas_Database_was_deleted');
             break;
         case 'db_listease':
             $conn_params = $_SESSION['conn_params'];
             $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
             $conn->query("drop schema if exists listease;");
-            unset($_SESSION['conn_params']);
-            unset($_SESSION['email']);
-            if (file_exists(__DIR__ . "/connection.txt")) {
-                unlink(__DIR__ . "/connection.txt");
-            }
             header('Location: ./index.php?status=success_ListEase_Database_was_deleted');
             break;
         case 'conn':

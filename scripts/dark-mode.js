@@ -7,11 +7,7 @@ function setTheme(themeName) {
         setDark();
     } else if (themeName === 'theme-light') {
         document.getElementById('switch').innerHTML = '<i class="bi bi-brightness-high"></i>';
-        document.documentElement.setAttribute('data-bs-theme', 'light');
-        document.body.classList.remove('bg-dark');
-        document.body.classList.add('bg-light');
-        document.getElementById('navbar').classList.remove('bg-dark');
-        document.getElementById('navbar').classList.add('bg-light');
+        setLight();
     } else if (themeName === 'theme-device') {
         const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
         let deviceIcon = '<i class="bi ';
@@ -29,25 +25,28 @@ function setTheme(themeName) {
         if (prefersDarkMode) {
             setDark();
         } else {
-            document.documentElement.setAttribute('data-bs-theme', 'light');
-            document.body.classList.remove('bg-dark');
-            document.body.classList.add('bg-light');
-            document.getElementById('navbar').classList.remove('bg-dark');
-            document.getElementById('navbar').classList.add('bg-light');
+            setLight();
         }
     }
 }
-
 function setLight(){
-
+    document.documentElement.setAttribute('data-bs-theme', 'light');
+    document.body.classList.remove('bg-dark');
+    document.body.classList.add('bg-light');
+    if (document.getElementById('navbar') !== null) {
+        document.getElementById('navbar').classList.remove('bg-dark');
+        document.getElementById('navbar').classList.add('bg-light');
+    }
 }
 
 function setDark(){
     document.documentElement.setAttribute('data-bs-theme', 'dark');
     document.body.classList.remove('bg-light');
     document.body.classList.add('bg-dark');
-    document.getElementById('navbar').classList.remove('bg-light');
-    document.getElementById('navbar').classList.add('bg-dark');
+    if (document.getElementById('navbar') !== null) {
+        document.getElementById('navbar').classList.remove('bg-light');
+        document.getElementById('navbar').classList.add('bg-dark');
+    }
 }
 
 

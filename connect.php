@@ -6,14 +6,14 @@ if (!isset($_GET['tool'])) {
     exit();
 }
 include('./database_checker.php');
-if (isset($database_connected) and isset($connection)) {
+if (isset($database_connected, $connection)) {
     if (!$database_connected) {
         if ($_GET['tool'] == 'listease') {
             try {
                 CreateDatabaseListEase($connection);
             } catch (Exception $e) {
             }
-        } else if ($_GET['tool'] == 'estateatlas'){
+        } else if ($_GET['tool'] == 'estateatlas') {
             try {
                 createDatabaseEstateAtlas($connection);
             } catch (Exception $e) {
@@ -125,7 +125,11 @@ echo '<label for="port" class="form-label">Port</label>';
 echo '<input type="number" class="form-control" id="port" name="port" value="3306">';
 echo '</div>';
 echo '<button type="submit" class="btn btn-primary">Submit</button>';
-
+echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>';
+echo '<script src="./scripts/dark-mode.js"></script>';
+echo '</form>';
+echo '</body>';
+echo '</html>';
 function createDatabaseListEase(mysqli $conn): void
 {
     try {
@@ -144,7 +148,7 @@ function createDatabaseListEase(mysqli $conn): void
               `price` float(10,2) DEFAULT NULL,
               `user_id` int NOT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
+            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
     $conn->query($sql);
     $sql = 'CREATE TABLE IF NOT EXISTS `users` (
               `id` int NOT NULL AUTO_INCREMENT,
@@ -152,8 +156,14 @@ function createDatabaseListEase(mysqli $conn): void
               `psw` varchar(100) NOT NULL,
               PRIMARY KEY (`id`),
               UNIQUE KEY `email` (`email`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
+            ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;';
     $conn->query($sql);
+
+    $sql = 'ALTER TABLE `items` MODIFY `id` int NOT NULL AUTO_INCREMENT;';
+    $conn->query($sql);
+    $sql = 'ALTER TABLE `users` MODIFY `id` int NOT NULL AUTO_INCREMENT;';
+    $conn->query($sql);
+
 }
 
 function createDatabaseEstateAtlas(mysqli $conn): void
@@ -225,7 +235,7 @@ function createDatabaseEstateAtlas(mysqli $conn): void
     $conn->query("TRUNCATE TABLE `company`;");
 
     $conn->query('INSERT INTO `user` (`id`, `email`, `password`) VALUES
-                        (1, `admin@admin.com`, `$2y$10$iKO0idnCIiU.tCkrNMjiEOgODufKIRxgqOoBo4Co6DnNq174Q6ZAm`);');
+                        (1, \'admin@admin.com\', \'$2y$10$iKO0idnCIiU.tCkrNMjiEOgODufKIRxgqOoBo4Co6DnNq174Q6ZAm\');');
 
     $conn->query("INSERT INTO `company` (`id`, `name`, `address`, `zip`, `city`, `country`) VALUES
                         (1, 'Company B', '456 Oak St', 56789, 'City B', 'CA'),
@@ -266,5 +276,6 @@ function createDatabaseEstateAtlas(mysqli $conn): void
     ADD CONSTRAINT `fk_ownership_list_company` FOREIGN KEY (`id_company`) REFERENCES `company` (`id`) ON DELETE CASCADE,
     ADD CONSTRAINT `fk_ownership_list_owner` FOREIGN KEY (`id_owner`) REFERENCES `owner` (`id`) ON DELETE CASCADE,
     ADD CONSTRAINT `fk_ownership_list_parcel` FOREIGN KEY (`id_parcel`) REFERENCES `parcel` (`id`) ON DELETE CASCADE;");
+
     $conn->query("COMMIT;");
 }

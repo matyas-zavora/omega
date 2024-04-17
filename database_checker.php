@@ -22,6 +22,7 @@ if (file_exists($file_location) && !isset($_SESSION['conn_params'])) {
     if (isset($_GET['tool'])){
         try {
             $connection->select_db($_GET['tool']);
+            $database_connected = true;
         } catch (Exception $e) {
             $database_connected = false;
         }

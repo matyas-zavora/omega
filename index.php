@@ -145,7 +145,7 @@ if (isset($_GET['status'])) {
                     </button>
                     <a href="./connect.php?tool=listease" class="btn btn-success" target="_blank">View Project</a>
                 </div>
-                <div class="collapse" id="project2Collapse">
+                <div class="collapse" id="project3Collapse">
                     <div class="card card-body">
                         Shopping list website that allows the user to add, remove and edit items on the list. The
                         processing is done by a backend written in php. The website is written in html, css and
@@ -157,14 +157,23 @@ if (isset($_GET['status'])) {
     </div>
 </div>
 <?php
-echo $_SESSION['conn_params']['host'];
+
+
 if (isset($_SESSION['conn_params'])) {
     echo '<div class="container">';
     echo '<div class="col-lg-12 mb-4">';
     echo '<div class="card">';
     echo '<div class="card-body">';
-    echo '<a href="./delete.php?todo=db_estateatlas" class="btn btn-danger">Delete EstateAtlas Database</a> ';
-    echo '<a href="./delete.php?todo=db_listease" class="btn btn-danger">Delete ListEase Database</a> ';
+    try {
+        $connection->select_db('estateatlas');
+        echo '<a href="./delete.php?todo=db_estateatlas" class="btn btn-danger">Delete EstateAtlas Database</a> ';
+    } catch (Exception $e) {
+    }
+    try{
+        $connection->select_db('listease');
+        echo '<a href="./delete.php?todo=db_listease" class="btn btn-danger">Delete ListEase Database</a> ';
+    } catch (Exception $e) {
+    }
     echo '<a href="./delete.php?todo=conn" class="btn btn-danger">Delete Connection</a>';
     echo '</div>';
     echo '</div>';

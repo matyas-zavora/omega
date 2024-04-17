@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+session_start();
 include('database_checker.php');
 ?>
 <!DOCTYPE html>
@@ -53,17 +54,21 @@ include('database_checker.php');
 </nav>
 <?php
 if (isset($_GET['status'])) {
-    echo '<div class="alert alert-success text-center" role="alert">';
-    switch ($_GET['status']) {
-        case 'db_deleted':
-            echo '<h4 class="alert-heading">Database was deleted successfully.</h4>';
-            break;
-        case 'conn_deleted':
-            echo '<h4 class="alert-heading">Saved database connection was deleted successfully.</h4>';
-            break;
+    $status = $_GET['status'];
+    $status = str_replace('_', ' ', $status);
+    if (str_starts_with($status, 'error')) {
+        $status = substr($status, 6);
+        echo '<div class="alert alert-danger text-center" role="alert">';
+        echo '<h4 class="alert-heading">An error occurred: ' . $status . '</h4>';
+        echo '</div>';
+        echo '<script> setTimeout(() => { document.querySelector(".alert").remove(); }, 2000); </script>';
+    } elseif (str_starts_with($status, 'success')){
+        echo '<div class="alert alert-success text-center" role="alert">';
+        $status = substr($status, 7);
+        echo '<h4 class="alert-heading">'.$status.'.</h4>';
+        echo '</div>';
+        echo '<script> setTimeout(() => { document.querySelector(".alert").remove(); }, 2000); </script>';
     }
-    echo '</div>';
-    echo '<script> setTimeout(() => { document.querySelector(".alert").remove(); }, 2000); </script>';
 }
 ?>
 <div class="container" id="projects">
@@ -84,8 +89,7 @@ if (isset($_GET['status'])) {
                         Details
                     </button>
                     <a href="trimify" class="btn btn-success" target="_blank">View Project</a>
-                    <a href="https://github.com/matyas-zavora/aplha-2" class="btn btn-secondary" target="_blank">GitHub
-                        Repo</a>
+                    <a href="https://github.com/matyas-zavora/aplha-2" class="btn btn-secondary" target="_blank"><i class="bi bi-github"></i></a>
                 </div>
                 <div class="collapse" id="project1Collapse">
                     <div class="card card-body">
@@ -112,12 +116,7 @@ if (isset($_GET['status'])) {
                         Details
                     </button>
                     <a href="./connect.php?tool=estateatlas" class="btn btn-success" target="_blank">View project</a>
-                    <a href="https://github.com/matyas-zavora/aplha-3" class="btn btn-secondary" target="_blank">GitHub
-                        Repo</a>
-                    <?php if (isset($_SESSION['conn_params'])): ?>
-                        <a href="./delete.php?todo=db" class="btn btn-danger">Delete Database</a>
-                        <a href="./delete.php?todo=conn" class="btn btn-danger">Delete Connection</a>
-                    <?php endif; ?>
+                    <a href="https://github.com/matyas-zavora/aplha-3" class="btn btn-secondary" target="_blank"><i class="bi bi-github"></i></a>
                 </div>
                 <div class="collapse" id="project2Collapse">
                     <div class="card card-body">
@@ -158,16 +157,20 @@ if (isset($_GET['status'])) {
     </div>
 </div>
 <?php
-//Database control section
-if ($database_connected) {
+echo $_SESSION['conn_params']['host'];
+if (isset($_SESSION['conn_params'])) {
+    echo '<div class="container">';
     echo '<div class="col-lg-12 mb-4">';
     echo '<div class="card">';
     echo '<div class="card-body">';
-    echo '<a href="./delete.php?todo=db" class="btn btn-danger">Delete Database</a> ';
+    echo '<a href="./delete.php?todo=db_estateatlas" class="btn btn-danger">Delete EstateAtlas Database</a> ';
+    echo '<a href="./delete.php?todo=db_listease" class="btn btn-danger">Delete ListEase Database</a> ';
     echo '<a href="./delete.php?todo=conn" class="btn btn-danger">Delete Connection</a>';
     echo '</div>';
     echo '</div>';
     echo '</div>';
+    echo '</div>';
+
 }
 ?>
 <?php

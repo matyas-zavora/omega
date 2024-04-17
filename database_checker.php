@@ -20,7 +20,11 @@ if (file_exists($file_location) && !isset($_SESSION['conn_params'])) {
         $_SESSION['conn_params'] = $conn_params;
     }
     if (isset($_GET['tool'])){
-        $connection->select_db($_GET['tool']);
+        try {
+            $connection->select_db($_GET['tool']);
+        } catch (Exception $e) {
+            $database_connected = false;
+        }
     }
     if (isset($relocate) && $relocate) {
         header('Location: index.php');

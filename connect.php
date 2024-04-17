@@ -6,9 +6,21 @@ if (!isset($_GET['tool'])) {
     exit();
 }
 include('./database_checker.php');
-if (isset($database_connected) && $database_connected) {
-    header('Location: ./' . $_GET['tool']);
-    exit();
+if (isset($database_connected) and isset($connection)) {
+    if (!$database_connected) {
+        if ($_GET['tool'] == 'listease') {
+            try {
+                CreateDatabaseListEase($connection);
+            } catch (Exception $e) {
+            }
+        } else if ($_GET['tool'] == 'estateatlas'){
+            try {
+                createDatabaseEstateAtlas($connection);
+            } catch (Exception $e) {
+            }
+        }
+    }
+    header("Location: ./" . $_GET['tool']);
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $host = $_POST['host'];
@@ -37,10 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $connection->select_db($_GET['tool']);
         } catch (Exception $e) {
-            if ($_GET['tool'] == 'listease') {
-                CreateDatabaseListEase($connection);
-            } else if ($_GET['tool'] == 'estateatlas') {
-                createDatabaseEstateAtlas($connection);
+            if (isset($database_connected) and !$database_connected){
+                if ($_GET['tool'] == 'listease') {
+                    CreateDatabaseListEase($connection);
+                } else if ($_GET['tool'] == 'estateatlas') {
+                    createDatabaseEstateAtlas($connection);
+                }
             }
             exit();
         }

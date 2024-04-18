@@ -60,14 +60,10 @@ function isFileUploaded() {
 function toggleShortenButton() {
     if (isTableFilled() && isFileUploaded()) {
         buttonGroup.innerHTML =
-            "<div aria-label=\"Button group with spacing\" class=\"btn-group me-2\" role=\"group\">" +
-            "   <div class=\"btn-group\" style=\"width: 50%;\">" +
+            "<div aria-label=\"Button group with spacing\" class=\"me-2 d-flex\" role=\"group\">" +
             "       <input class=\"btn btn-danger btn-block\" id=\"clearBtn\" onclick=\"clearTable()\" type=\"button\" value=\"Clear Table\">" +
-            "   </div>" +
-            "   <div class=\"btn-group me-2\" role=\"group\"></div>" +
-            "   <div class=\"btn-group\" style=\"width: 50%;\">" +
+            "   <div class=\"me-2 \" role=\"group\"></div>" +
             "       <input class=\"btn btn-info btn-block\" id=\"shortenBtn\" type=\"submit\" value=\"Shorten!\">" +
-            "   </div>" +
             "</div>"
         ;
     }

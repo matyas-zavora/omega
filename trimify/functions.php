@@ -60,7 +60,7 @@ function _log(string $message)
  * @param string $message The message to be displayed.
  * @param string $alertType The type of the message (error, info, success).
  */
-function writeMessage(string $message, string $alertType)
+function writeMessage(string $message, string $alertType): void
 {
     echo '<script>
             const alert = document.getElementById("phpError");
@@ -96,7 +96,7 @@ function writeMessage(string $message, string $alertType)
  * @param array $input1 The array of strings to be replaced.
  * @param array $input2 The array of replacement strings.
  */
-function processFile(string $targetFile, string $uploadDir, array $input1, array $input2)
+function processFile(string $targetFile, string $uploadDir, array $input1, array $input2): void
 {
     shortenFile($targetFile, $uploadDir, $input1, $input2);
     downloadFile($targetFile, $uploadDir);
@@ -128,5 +128,3 @@ function downloadFile(string $targetFile, string $uploadDir)
         exit;
     }
 }
-
-?>

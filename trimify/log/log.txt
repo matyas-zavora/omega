@@ -4,3 +4,19 @@
 11/1/2024 12:58:37 - success - input.txt has been uploaded successfully.
 11/1/2024 12:58:37 - info - File input.txt has been renamed to output.txt
 11/1/2024 12:58:37 - info - File output.txt has been deleted.
+18/4/2024 17:28:19 - error: There has been an error uploading the file. Please try again.
+18/4/2024 17:30:26 - error: There has been an error uploading the file. Please try again.
+18/4/2024 17:32:50 - error: There has been an error uploading the file. Please try again.
+18/4/2024 17:35:5 - error: There has been an error uploading the file. Please try again.
+18/4/2024 17:35:12 - error: There has been an error uploading the file. Please try again.
+18/4/2024 17:35:31 - error: There has been an error uploading the file. Please try again.2
+18/4/2024 17:36:14 - success - test.txt has been uploaded successfully.
+18/4/2024 17:36:14 - info - File test.txt has been renamed to petr.txt
+18/4/2024 17:36:14 - info - File petr.txt has been deleted.
+18/4/2024 17:36:35 - success - test.txt has been uploaded successfully.
+18/4/2024 17:36:35 - info - File test.txt has been deleted.
+18/4/2024 17:36:48 - success - test.txt has been uploaded successfully.
+18/4/2024 17:36:48 - info - File test.txt has been deleted.
+18/4/2024 18:53:18 - success - test.txt has been uploaded successfully.
+18/4/2024 18:53:18 - info - File test.txt has been renamed to fweoíéj.txt
+18/4/2024 18:53:18 - info - File fweoíéj.txt has been deleted.

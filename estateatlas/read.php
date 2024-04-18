@@ -4,44 +4,43 @@ if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();
 }
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>EstateAtlas | Read</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
-    <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-    <link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-    <link href="img/favicon/site.webmanifest" rel="manifest">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <link href="styles/reset.css" rel="stylesheet">
-    <link href="styles/index.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-          rel="stylesheet"/>
-    <link href="styles/google_icons.css" rel="stylesheet">
-</head>
-<body>
-<div class="container">
-    <form method="POST">
-        <label for="table">Select a table:</label>
-        <select id="table" name="table">
-            <option value="user">User</option>
-            <option value="parcel">Parcel</option>
-            <option value="company">Company</option>
-            <option value="owner">Owner</option>
-            <option value="ownership_list">Ownership List</option>
-            <option value="log">Log</option>
-        </select>
-        <button class="btn btn-primary" type="submit">Read</button>
-        <a class="btn btn-danger" href="./">Return</a>
-        <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
-    </form>
-</div>
-<?php
+
+echo '<!DOCTYPE html>';
+echo '<html lang="en">';
+echo '<head>';
+echo '<meta charset="UTF-8">';
+echo '<title>EstateAtlas | Read</title>';
+echo '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">';
+echo '<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">';
+echo '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">';
+echo '<link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">';
+echo '<link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">';
+echo '<link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">';
+echo '<link href="img/favicon/site.webmanifest" rel="manifest">';
+echo '<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">';
+echo '<link href="styles/reset.css" rel="stylesheet">';
+echo '<link href="styles/index.css" rel="stylesheet">';
+echo '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>';
+echo '<link href="styles/google_icons.css" rel="stylesheet">';
+echo '</head>';
+echo '<body>';
+echo '<div class="container">';
+echo '<form method="POST">';
+echo '<label for="table">Select a table:</label>';
+echo '<select id="table" name="table">';
+echo '<option value="user">User</option>';
+echo '<option value="parcel">Parcel</option>';
+echo '<option value="company">Company</option>';
+echo '<option value="owner">Owner</option>';
+echo '<option value="ownership_list">Ownership List</option>';
+echo '<option value="log">Log</option>';
+echo '</select>';
+echo '<button class="btn btn-primary" type="submit">Read</button>';
+echo '<a class="btn btn-danger" href="./">Return</a>';
+echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>';
+echo '</form>';
+echo '</div>';
+
 $conn_params = $_SESSION['conn_params'];
 $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], 'estateatlas', $conn_params['port']);
 
@@ -134,4 +133,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 echo '<script src="../scripts/dark-mode.js"></script>';
 echo '</div></body></html>';
-?>

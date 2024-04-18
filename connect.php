@@ -14,8 +14,6 @@ if (isset($database_connected, $connection)) {
     if (!$database_connected) {
         if ($_GET['tool'] == 'listease') {
             try {
-                echo "test";
-                exit();
                 CreateDatabaseListEase($connection);
             } catch (Exception $e) {
             }
@@ -144,6 +142,9 @@ function createDatabaseListEase(mysqli $conn): void
         $conn->query($sql);
     } catch (Exception $e) {
     }
+    $conn->query("SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';");
+    $conn->query("START TRANSACTION;");
+    $conn->query("SET time_zone = '+00:00';");
     $sql = 'CREATE DATABASE `listease` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;';
     $conn->query($sql);
     $sql = 'USE `listease`;';
@@ -170,11 +171,16 @@ function createDatabaseListEase(mysqli $conn): void
     $conn->query($sql);
     $sql = 'ALTER TABLE `users` MODIFY `id` int NOT NULL AUTO_INCREMENT;';
     $conn->query($sql);
+    $conn->query('ALTER TABLE `users` ADD UNIQUE(`email`); ');
 
 }
 
 function createDatabaseEstateAtlas(mysqli $conn): void
 {
+    try{
+        $conn->query('DROP DATABASE `estateatlas`');
+    } catch (Exception $e) {
+    }
     $conn->query("SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';");
     $conn->query("START TRANSACTION;");
     $conn->query("SET time_zone = '+00:00';");

@@ -10,13 +10,17 @@ $connection->select_db('listease');
 //Check if the user wants to change the price
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
-    $price = filter_input()
-    //UPDATE items SET price = $price WHERE id = $id
+    $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_STRING);
     $stmt = $connection->prepare('UPDATE items SET price = ? WHERE id = ?');
     $stmt->bind_param('di', $price, $id);
-    $connection->query($sql);
-    if ($connection->error) {
-        $_SESSION['error_message'] = 'Error updating price | ' . $connection->error;
+    try{
+        $stmt->execute();
+    } catch (Exception $e){
+        echo $e->getMessage();
     }
 }
-header('Location: index.php');
+if (isset($e)){
+    $_SESSION['error_message'] = 'Error updating price | ' . $e;
+}
+header('Location: ./');
+exit();

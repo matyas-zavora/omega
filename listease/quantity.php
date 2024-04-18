@@ -1,40 +1,27 @@
 <?php
-//Get connection from connection.txt
-$file = fopen('connection.txt', 'r');
-if (!$file) header('Location: connect.php');
-$conn_params = fread($file, filesize('connection.txt'));
-fclose($file);
-$conn_params = json_decode($conn_params, true);
-if ($conn_params) {
-    $host = $conn_params['host'];
-    $user = $conn_params['user'];
-    $password = $conn_params['password'];
-    $port = $conn_params['port'];
-    $connection = new mysqli($host, $user, $password, 'listease', $port);
-    if ($connection->connect_error) {
-        unlink('connection.txt');
-        header('Location: connect.php');
-    }
-} else {
-    header('Location: connect.php');
-    exit();
-}
-
-//Check if the user is logged in
+//show errors
+ini_set('display_errors', 1);
 session_start();
-if (!isset($_SESSION['email'])) {
+if (!isset($_SESSION['email'])){
     header('Location: login.php');
     exit();
 }
+include('../database_checker.php');
+$connection->select_db('listease');
 
 //Check if the user wants to change the quantity
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'];
     $quantity = $_POST['quantity'];
-    $sql = "UPDATE items SET quantity = $quantity WHERE id = $id";
-    $connection->query($sql);
-    if ($connection->error) {
-        $_SESSION['error_message'] = 'Error updating quantity | ' . $connection->error;
+    $stmt = $connection->prepare('UPDATE items SET quantity = ? WHERE id = ?');
+    $stmt->bind_param('di', $quantity, $id);
+    try{
+        $stmt->execute();
+    } catch (Exception $e){
+        echo $e->getMessage();
     }
+}
+if (isset($e)){
+    $_SESSION['error_message'] = 'Error updating quantity | ' . $e;
 }
 header('Location: index.php');

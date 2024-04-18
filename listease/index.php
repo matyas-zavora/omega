@@ -1,4 +1,6 @@
 <?php
+//show error
+ini_set('display_errors', 1);
 session_start();
 if (!isset($_SESSION['email'])){
     header('Location: login.php');
@@ -76,17 +78,18 @@ if ($result->num_rows > 0) {
         </div>
     </div>
     <div class="row">
-        <!-- check if there are any items -->
-        <?php
-        ?>
         <div class="col-12">
             <ul class="list-group list-group-flush">
+                <?php if (empty($itemsArray)): ?>
+                    <li class="list-group list-group-item">So empty...</li>
+                <?php else: ?>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col" class="col-3">Name</th>
                         <th scope="col" class="col-3">Quantity</th>
-                        <th scope="col" class="col-3">Price</th>
+                        <th scope="col" class="col-3">Cost Per Item</th>
+                        <th scope="col" class="col-3">Total Cost</th>
                         <th scope="col" class="col-3">Action</th>
                     </tr>
                     </thead>
@@ -94,20 +97,32 @@ if ($result->num_rows > 0) {
                     <?php foreach ($itemsArray as $item): ?>
                         <tr>
                             <td class="align-middle"><?php echo $item['name']; ?></td>
-                            <td class="align-middle"><?php echo $item['quantity']; ?></td>
-                            <td class="align-middle">
+                            <td class="align-middle" id="quantity-<?php echo $item['id']; ?>" onclick="replaceWithInput(<?php echo $item['id']; ?>, 'quantity')">
+                                <?php echo $item['quantity']; ?>
+                            </td>
+                            <td class="align-middle" id="price-<?php echo $item['id']; ?>" onclick="replaceWithInput(<?php echo $item['id']; ?>, 'price')">
                                 <?php
-                                if (isset($_item['price'])){
-                                echo $item['price'] . ' CZK';
+                                if (isset($item['price'])){
+                                    echo number_format($item['price'],2,',',' ') . ' Kč';
                                 }
                                 ?>
                             </td>
-                            <td class="text-end d-flex justify-content-between row">
+                            <td class="align-middle">
+                                <?php
+                                    if(isset($item['quantity'], $item['price'])){
+                                        $price = number_format($item['quantity'] * $item['price'], 2, ',', ' ');
+                                        echo $price . ' Kč';
+                                    } else {
+                                        echo 'N/A';
+                                    }
+                                ?>
+                            </td>
+                            <td class="d-flex justify-content-between row">
                                 <button type="submit" class="btn btn-danger col" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal<?php echo $item['id']; ?>"><i
                                             class="bi bi-trash h3"></i></button>
                                 <?php if (is_null($item['price'])) : ?>
-                                    <button type="button" class="btn btn-primary col me-2 ms-2" data-bs-toggle="modal"
+                                    <button type="button" class="btn btn-primary col mt-2" data-bs-toggle="modal"
                                             data-bs-target="#priceModal<?php echo $item['id']; ?>">
                                         <i class="bi bi-cash h3"></i>
                                     </button>
@@ -143,7 +158,7 @@ if ($result->num_rows > 0) {
                                     </div>
                                 <?php endif; ?>
                                 <?php if (is_null($item['quantity'])) : ?>
-                                <button type="button" class="btn btn-primary btn-block col" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-primary btn-block col mt-2" data-bs-toggle="modal"
                                         data-bs-target="#quantityModal<?php echo $item['id']; ?>">
                                     <i class="bi bi-plus h3"></i>
                                 </button>
@@ -201,10 +216,29 @@ if ($result->num_rows > 0) {
                     <?php endforeach; ?>
                     </tbody>
             </ul>
+            <?php endif; ?>
         </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../scripts/dark-mode.js"></script>
+<script>
+    function replaceWithInput(itemId, field) {
+        const tdElement = document.getElementById(field + '-' + itemId);
+        if (tdElement.innerHTML.trim() === '') {
+            return;
+        }
+        if (tdElement.getElementsByTagName('input').length === 0) {
+            let currentValue = tdElement.innerHTML.trim();
+            currentValue = currentValue.replace(',00', '').replace(' Kč', '');
+            const inputField = '<input type="number" class="form-control" name="' + field + '" placeholder="' + currentValue + '">';
+            const submitButton = '<button class="btn btn-success mt-2">Submit</button>';
+            tdElement.innerHTML = '<form action="' + field + '.php" method="post">' +
+                '<input type="hidden" name="id" value="' + itemId + '"><div class="row m-2">' + inputField + submitButton + '</div></form>';
+            tdElement.children[0].children[1].children[0].focus();
+        }
+    }
+</script>
+
 </body>
 </html>

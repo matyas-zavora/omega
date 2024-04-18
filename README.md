@@ -30,7 +30,7 @@ The application uses a MySQL database to store data related to each sub-project.
 </details>
 <details>
 <summary>ListEase</summary>
-![image](https://github.com/matyas-zavora/omega/assets/105340917/40634d0d-bdaa-4ebb-8583-f8a61ec5c26f)
+<img src="https://github.com/matyas-zavora/omega/assets/105340917/40634d0d-bdaa-4ebb-8583-f8a61ec5c26f">
 </details>
 
 ---

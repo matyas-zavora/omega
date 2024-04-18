@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+// Output HTML content
 echo '<!DOCTYPE html>';
 echo '<html lang="en">';
 echo '<head>';

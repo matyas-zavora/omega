@@ -1,4 +1,8 @@
 <?php
+/**
+ * Generates a form template for adding a new company.
+ * @return void
+ */
 function templateCompany(): void
 {
     echo '<div class="form-group">';
@@ -35,6 +39,10 @@ function templateCompany(): void
     echo '</div>';
 }
 
+/**
+ * Generates a form template for adding a new owner.
+ * @return void
+ */
 function templateOwner(): void
 {
     echo '<div class="form-group">';
@@ -67,6 +75,13 @@ function templateOwner(): void
     echo '</div>';
 }
 
+/**
+ * Generates a form template for adding a new ownership.
+ * @param array $parcels
+ * @param array $owners
+ * @param array $companies
+ * @return void
+ */
 function templateOwnershipList(Array $parcels, Array $owners, Array $companies) : void
 {
 echo "<div class='form-group'>";
@@ -118,6 +133,10 @@ echo "</form>";
 echo "</div>";
 }
 
+/**
+ * Generates a form template for adding a new parcel.
+ * @return void
+ */
 function templateParcels() : void
 {
     echo '<div class="form-group">';
@@ -174,6 +193,10 @@ function templateParcels() : void
     echo '</div>';
 }
 
+/**
+ * Generates a form template for adding a new user.
+ * @return void
+ */
 function templateUser() : void
 {
     echo '<div class="form-group">';

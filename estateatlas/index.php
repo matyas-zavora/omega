@@ -1,23 +1,31 @@
 <?php
+// Start the session to access session variables
 session_start();
+
+// Check if the user is not logged in, redirect to the login page if not
 if (!isset($_SESSION['email'])) {
     header("Location: ./login.php");
     exit();
 }
 
+// HTML Document
 echo '<!DOCTYPE html>';
 echo '<html lang="en">';
 echo '<head>';
 echo '<meta charset="UTF-8">';
 echo '<title>EstateAtlas</title>';
+// Bootstrap CSS links
 echo '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">';
 echo '<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">';
 echo '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">';
+// Favicon links
 echo '<link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">';
 echo '<link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">';
 echo '<link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">';
 echo '<link href="img/favicon/site.webmanifest" rel="manifest">';
+// Google Fonts link
 echo '<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">';
+// Custom CSS links
 echo '<link href="styles/reset.css" rel="stylesheet">';
 echo '<link href="styles/index.css" rel="stylesheet">';
 echo '<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>';
@@ -65,6 +73,7 @@ echo '</div>';
 echo '</div>';
 echo '</div>';
 echo '</div>';
+// JavaScript script for theme switching
 echo '<script src="../scripts/dark-mode.js"></script>';
 echo '</body>';
 echo '</html>';

@@ -1,10 +1,14 @@
 <?php
+// Start the session to access session variables
 session_start();
+
+// Redirect to login page if user is not logged in
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();
 }
 
+// Output HTML content
 echo '<!DOCTYPE html>';
 echo '<html lang="en">';
 echo '<head>';
@@ -41,17 +45,22 @@ echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type
 echo '</form>';
 echo '</div>';
 
+// Access session parameters for database connection
 $conn_params = $_SESSION['conn_params'];
+
+// Establish connection to the database
 $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], 'estateatlas', $conn_params['port']);
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['formName'])) {
         if ($_POST['formName'] == 'dataDeletion') {
+            // Delete data from the selected table
             $tableName = $_POST['table'] ?? '';
             $id = $_POST['id'] ?? '';
             $sql = "DELETE FROM $tableName WHERE id = $id";
 
+            // Execute SQL query for data deletion
             if ($conn->query($sql)) {
                 echo "<div class='alert alert-success' role='alert' id='successAlert'>Data has been deleted successfully</div>";
                 echo "<script>setTimeout(function() { document.getElementById('successAlert').style.display='none'; }, 3000);</script>";
@@ -60,13 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "<script>setTimeout(function() { document.getElementById('errorAlert').style.display='none'; }, 3000);</script>";
             }
 
-            // log
+            // Log the deletion action
             $sql_user = "SELECT id FROM user WHERE email = '" . $_SESSION['email'] . "'";
             $id_user = $conn->query($sql_user)->fetch_assoc()['id'];
             $sql_log = "INSERT INTO log (type, id_user, description) VALUES ('delete', '" . $id_user . "', 'Delete data from table " . $tableName . "')";
             $conn->query($sql_log);
         }
     }
+
     // Assuming you have a variable to determine the table, you can set it based on the form submission.
     $tableName = $_POST['table'] ?? ''; // You can change this condition based on your requirements.
 
@@ -75,6 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
+    // Log the view action
     $sql_user = "SELECT id FROM user WHERE email = '" . $_SESSION['email'] . "'";
     $id_user = $conn->query($sql_user)->fetch_assoc()['id'];
     $sql_log = "INSERT INTO log (type, id_user, description) VALUES ('view', '" . $id_user . "', 'Read table " . $tableName . "')";
@@ -86,6 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = $conn->query($sql_data);
     $head = $conn->query($sql_head);
 
+    // Output table headers
     echo "<table class='table table-striped table-bordered'><caption>" . $tableName . "</caption><thead><tr>";
     while ($row = $head->fetch_assoc()) {
         if ($row['Field'] == 'latitude') {
@@ -99,9 +111,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // Output action column if the table is not 'log'
     if ($tableName != 'log') {
         echo "<th>Action</th></tr></thead><tbody>";
     }
+
+    // Output table data
     if ($data->num_rows > 0) {
         while ($row = $data->fetch_assoc()) {
             echo "<tr>";
@@ -129,7 +144,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "0 results";
     }
     echo "</tbody></table>";
-
 }
+
+// Include dark mode script
 echo '<script src="../scripts/dark-mode.js"></script>';
 echo '</div></body></html>';

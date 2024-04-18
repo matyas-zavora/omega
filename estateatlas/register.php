@@ -1,23 +1,39 @@
 <?php
+// Start the session
 session_start();
+// Include the database checker file
 include('../database_checker.php');
+
+// Select the 'estateatlas' database
 $connection->select_db('estateatlas');
+
+// Check if the request method is POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    unset($_SESSION['email']);
+    // Sanitize and retrieve email and password from POST data
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+
+    // Hash the password
     $password = password_hash($password, PASSWORD_DEFAULT);
 
+    // Prepare and execute the SQL statement to insert user data into the 'user' table
     $stmt = $connection->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
     $stmt->bind_param("ss", $email, $password);
+
     try {
         $stmt->execute();
+        // Set the email session variable
         $_SESSION['email'] = $email;
+        // Redirect to the homepage
         header('Location: ./');
     } catch (Exception $e) {
+        // If an exception occurs, store the error and display it
         $error = $e;
     }
 }
 
+// HTML content for the registration form
 echo '<!doctype html>';
 echo '<html lang="en">';
 echo '<head>';
@@ -37,11 +53,15 @@ echo '<link rel="stylesheet" href="../styles/font.css">';
 echo '<title>EstateAtlas - Registration</title>';
 echo '</head>';
 echo '<body>';
+
+// Display error message if exists
 if (isset($error)) {
     echo '<div class="alert alert-danger" role="alert">';
     echo $error->getMessage();
     echo '</div>';
 }
+
+// HTML content for the registration form
 echo '<div class="container">';
 echo '<div class="row">';
 echo '<div class="col-12">';

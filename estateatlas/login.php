@@ -1,24 +1,42 @@
 <?php
-session_start();
-include('../database_checker.php');
-$connection->select_db('estateatlas');
+session_start(); // Start the session to manage user sessions
+include('../database_checker.php'); // Include the file for database connection
+$connection->select_db('estateatlas'); // Select the database named 'estateatlas'
+
+// Check if the form is submitted via POST method
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve email and password from the POST data
     $email = $_POST['email'];
     $password = $_POST['password'];
+
+    // SQL query to fetch user data based on the provided email
     $sql = "SELECT id,password FROM user WHERE email = '$email'";
+
+    // Execute the query
     $result = $connection->query($sql);
+
+    // Check if any rows are returned
     if ($result->num_rows > 0) {
+        // Fetch the first row from the result set
         $row = $result->fetch_assoc();
+
+        // Verify the password using password_verify function
         if (password_verify($password, $row['password'])) {
+            // Set session variables for email and user id
             $_SESSION['email'] = $email;
             $_SESSION['id'] = $row['id'];
+
+            // Redirect the user to the homepage after successful login
             header('Location: ./');
-            exit();
+            exit(); // Terminate script execution
         }
     } else {
+        // Display error message for invalid email or password
         echo '<div class="alert alert-danger" role="alert">Invalid email or password</div>';
     }
 }
+
+// Output the HTML content for the login form
 echo '<!DOCTYPE html>';
 echo '<html lang="en">';
 echo '<head>';

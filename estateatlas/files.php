@@ -1,12 +1,20 @@
 <?php
+// Start the session
 session_start();
+
+// Redirect to the login page if the user is not authenticated
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();
 }
+
+// Retrieve database connection parameters from the session
 $conn_params = $_SESSION['conn_params'];
+
+// Establish a MySQLi connection using the stored connection parameters
 $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
-include "../templates/files.php";
+
+// HTML document starts here
 echo '<!DOCTYPE html>';
 echo '<html lang="en">';
 echo '<head>';
@@ -52,4 +60,3 @@ echo '</div>';
 echo '<script src="../scripts/dark-mode.js"></script>';
 echo '</body>';
 echo '</html>';
-

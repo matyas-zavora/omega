@@ -1,20 +1,26 @@
 <?php
-// show errors
-ini_set('display_errors', 1);
-
 session_start();
+
+// Redirect to the login page if the user is not authenticated
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();
 }
+
+// Get database connection parameters from session
 $conn_params = $_SESSION['conn_params'];
+
+// Create a new MySQLi connection
 $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], 'estateatlas', $conn_params['port']);
 
+// Check if the request method is GET
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    // Check if the database connection is successful
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
+    // SQL query to retrieve parcel data with ownership and company information
     $sql_data = "SELECT 
                     p.number,
                     p.size,
@@ -41,8 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                  LEFT JOIN owner ow on ol.id_owner = ow.id 
                  LEFT JOIN company c on ol.id_company = c.id;";
 
+    // Execute the SQL query
     $data = $conn->query($sql_data);
 
+    // Open a file pointer for writing the CSV file
     $file = fopen("./output/full_parcel_data.csv", "w");
 
     // Write the header to the CSV file
@@ -51,8 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Reset the data pointer back to the beginning
     $data->data_seek(0);
 
+    // Loop through the result set and write each row to the CSV file
     while ($row = $data->fetch_assoc()) {
-        // Exclude the ID columns
+        // Exclude the ID columns from the output
         unset($row['id'], $row['id_parcel'], $row['id_owner'], $row['id_company']);
 
         // Write the row to the CSV file
@@ -68,5 +77,5 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     header("Pragma: no-cache");
     header("Expires: 0");
     readfile("./output/full_parcel_data.csv");
-    exit;
+    exit();
 }

@@ -1,16 +1,32 @@
 <?php
-//show errors
-ini_set('display_errors', 1);
+/**
+ * This script handles database connection and setup based on user input.
+ * It allows users to enter MySQL database credentials via a form and stores the credentials in a file.
+ * If the database connection fails, it displays error messages to the user.
+ * If the connection is successful, it redirects the user to the corresponding tool page.
+ * Additionally, it provides functions to create databases and tables for two specific tools: ListEase and EstateAtlas.
+ */
+
+// Redirect to index.php if 'tool' parameter is not provided
 if (!isset($_GET['tool'])) {
-    header('Location: index.php');
+    header('Location: ./');
     exit();
 }
+
+// Start session
 session_start();
+
+// Unset 'email' session variable if it's set
 if (isset($_SESSION['email'])){
     unset($_SESSION['email']);
 }
+
+// Include database_checker.php for checking database connection
 include('./database_checker.php');
+
+// Check if database is connected and connection object is set
 if (isset($database_connected, $connection)) {
+    // If database is not connected, attempt to create databases for specific tools
     if (!$database_connected) {
         if ($_GET['tool'] == 'listease') {
             try {
@@ -24,18 +40,26 @@ if (isset($database_connected, $connection)) {
             }
         }
     }
+    // Redirect to the corresponding tool page
     header("Location: ./" . $_GET['tool']);
 }
+
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form data
     $host = $_POST['host'];
     $user = $_POST['user'];
     $password = $_POST['password'];
     $port = $_POST['port'];
+
+    // Attempt to establish a new database connection
     try {
         $connection = new mysqli($host, $user, $password, '', $port);
     } catch (Exception $e) {
-        $error = $e->getMessage();
+        $error = $e->getMessage(); // Store error message
     }
+
+    // If no error, store connection parameters in a file and set session parameters
     if (!isset($error)) {
         $data = json_encode([
             'host' => $host,
@@ -48,11 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             fwrite($file, $data);
             fclose($file);
         } catch (TypeError $e) {
-            $error = $e->getMessage();
+            $error = $e->getMessage(); // Store error message
         }
         try {
-            $connection->select_db($_GET['tool']);
+            $connection->select_db($_GET['tool']); // Select database for the tool
         } catch (Exception $e) {
+            // If database connection fails, attempt to create databases for specific tools
             if (isset($database_connected) and !$database_connected){
                 if ($_GET['tool'] == 'listease') {
                     CreateDatabaseListEase($connection);
@@ -60,25 +85,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     createDatabaseEstateAtlas($connection);
                 }
             }
+            // Redirect to the corresponding tool page
             header("Location: ./" . $_GET['tool']);
             exit();
         }
+        // Set session parameters
         $_SESSION['conn_params'] = [
             'host' => $host,
             'user' => $user,
             'password' => $password,
             'port' => $port
         ];
+        // Redirect to the corresponding tool page
         header("Location: ./" . $_GET['tool']);
         exit();
     }
 }
+
+// Output HTML content for the form
 echo '<!DOCTYPE html>';
 echo '<html lang="en">';
 echo '<head>';
 echo '<meta charset="UTF-8">';
 echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 echo '<title>Database connection</title>';
+// Include CSS and favicon
 echo '<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">';
 echo '<link rel="apple-touch-icon" sizes="180x180" href="./img/favicon/apple-touch-icon.png">';
 echo '<link rel="icon" type="image/png" sizes="32x32" href="./img/favicon/favicon-32x32.png">';
@@ -91,13 +122,17 @@ echo '<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;
 echo '<link rel="stylesheet" href="styles/font.css">';
 echo '</head>';
 echo '<body>';
+// Display error message if set
 if (isset($error)) echo '<div class="alert alert-danger text-center" role="alert">Error: ' . $error . '</div>';
+// Display header
 echo '<header class="jumbotron text-center mt-lg-5">';
 echo '<h1 class="text-center">Enter your MySQL database credentials</h1>';
 echo '</header>';
+// Display form
 echo '<form method="post" class="container mt-5">';
 echo '<div class="mb-3">';
 echo '<label for="host" class="form-label">Host</label>';
+// Display input field for host with error message if 'php_network_getaddresses' error occurs
 if (isset($error) && strpos($error, 'php_network_getaddresses') !== false) {
     echo '<input type="text" class="form-control is-invalid" id="host" required name="host" value="' . $_POST['host'] . '">';
     echo '<div class="invalid-feedback">Invalid host</div>';
@@ -105,6 +140,7 @@ if (isset($error) && strpos($error, 'php_network_getaddresses') !== false) {
     echo '<input type="text" class="form-control" id="host" name="host" required value="localhost">';
 }
 echo '</div>';
+// Display input field for user with error message if 'Access denied' error occurs
 echo '<div class="mb-3">';
 echo '<label for="user" class="form-label">User</label>';
 if (isset($error) && strpos($error, 'Access denied') !== false) {
@@ -113,6 +149,7 @@ if (isset($error) && strpos($error, 'Access denied') !== false) {
     echo '<input type="text" class="form-control" id="user" name="user" value="root" required>';
 }
 echo '</div>';
+// Display input field for password with error message if 'Access denied' error occurs
 echo '<div class="mb-3">';
 echo '<label for="password" class="form-label">Password</label>';
 if (isset($error) && strpos($error, 'Access denied') !== false) {
@@ -122,18 +159,25 @@ if (isset($error) && strpos($error, 'Access denied') !== false) {
     echo '<input type="password" class="form-control" id="password" name="password">';
 }
 echo '</div>';
+// Display input field for port
 echo '<div class="mb-3">';
 echo '<label for="port" class="form-label">Port</label>';
 echo '<input type="number" class="form-control" id="port" name="port" value="3306">';
 echo '</div>';
+// Submit button
 echo '<button type="submit" class="btn btn-primary">Submit</button>';
+// Dark mode switch button
 echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>';
+// Dark mode script
 echo '<script src="./scripts/dark-mode.js"></script>';
 echo '</form>';
 echo '</body>';
 echo '</html>';
+
+// Function to create ListEase database
 function createDatabaseListEase(mysqli $conn): void
 {
+    // Create ListEase database tables
     try {
         $sql = 'DROP DATABASE `listease`';
         $conn->query($sql);
@@ -172,8 +216,10 @@ function createDatabaseListEase(mysqli $conn): void
 
 }
 
+// Function to create EstateAtlas database
 function createDatabaseEstateAtlas(mysqli $conn): void
 {
+    // Create EstateAtlas database tables
     try{
         $conn->query('DROP DATABASE `estateatlas`');
     } catch (Exception $e) {

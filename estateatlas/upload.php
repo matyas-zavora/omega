@@ -78,17 +78,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Sorry, the header of your file is not correct.";
         exit();
     } else {
+        // Process data and insert into database
+
+        // Loop through each row of data from the uploaded CSV file
         foreach ($data as $row) {
+            // Check if the parcel with the given number already exists in the database
             $parcel_number = $row['number'];
             $sql = "SELECT * FROM parcel WHERE number = '$parcel_number'";
             $result = $conn->query($sql);
             if ($result->num_rows == 0) {
+                // If the parcel does not exist, insert it into the 'parcel' table
                 $sql = "INSERT INTO parcel (number, size, latitude, longitude, date_of_ownership, legal_state, type,
-                     address, zip, city, country) VALUES ('" . $row['number'] . "', '" . $row['size'] . "', '" .
+             address, zip, city, country) VALUES ('" . $row['number'] . "', '" . $row['size'] . "', '" .
                     $row['latitude'] . "', '" . $row['longitude'] . "', '" . $row['date_of_ownership'] . "', '" .
                     $row['legal_state'] . "', '" . $row['type'] . "', '" . $row['address'] . "', '" . $row['zip'] .
                     "', '" . $row['city'] . "', '" . $row['country'] . "')";
 
+                // Execute the SQL query
                 if ($conn->query($sql) !== TRUE) {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                     exit();
@@ -96,15 +102,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // Loop through each row of data to handle owner information
         foreach ($data as $row) {
             $first_name = $row['first_name'];
             $last_name = $row['last_name'];
+            // Check if the owner with the given first and last names already exists in the database
             $sql = "SELECT * FROM owner WHERE first_name = '$first_name' AND last_name = '$last_name'";
             $result = $conn->query($sql);
             if ($result->num_rows == 0) {
+                // If the owner does not exist, insert it into the 'owner' table
                 $sql = "INSERT INTO owner (first_name, last_name, phone) VALUES ('" . $row['first_name'] . "', '" . $row['last_name'] . "', '" .
                     $row['phone'] . "')";
 
+                // Execute the SQL query
                 if ($conn->query($sql) !== TRUE) {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                     exit();
@@ -112,31 +122,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        // Loop through each row of data to handle company information
         foreach ($data as $row) {
             $company_name = $row['company_name'];
+            // Check if the company with the given name already exists in the database
             $sql = "SELECT * FROM company WHERE name = '$company_name'";
             $result = $conn->query($sql);
             if ($result->num_rows == 0) {
+                // If the company does not exist, insert it into the 'company' table
                 $sql = "INSERT INTO company (name, address, zip, city, country) VALUES ('" . $row['company_name'] . "', '" . $row['company_address'] . "', '" .
                     $row['company_zip'] . "', '" . $row['company_city'] . "', '" . $row['company_country'] . "')";
 
+                // Execute the SQL query
                 if ($conn->query($sql) !== TRUE) {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                     exit();
                 }
             }
         }
+
+        // Loop through each row of data to handle ownership information
         foreach ($data as $row) {
+            // Display information about the parcel, owner, and company
             echo $row['number'] . " " . $row['first_name'] . " " . $row['last_name'] . " " . $row['company_name'] . " " . $row['stake'] . "<br>";
+
+            // Calculate the total stake of the parcel
             $parcel_number = $row['number'];
             $sql = "SELECT SUM(stake) FROM ownership_list ol LEFT JOIN parcel p ON ol.id_parcel = p.id WHERE p.number = '" . $parcel_number . "' GROUP BY p.id";
             $result = $conn->query($sql);
             $sql_row = $result->fetch_assoc();
             $sumStake = $sql_row['SUM(stake)'] ?? 0;
+
+            // Check if the total stake exceeds 1
             if ($sumStake > 1) {
                 echo "Sorry, the stake of parcel number " . $parcel_number . " is more than 1.";
                 exit();
             } else {
+                // If the total stake is valid, insert ownership information into the 'ownership_list' table
                 $parcel_number = $row['number'];
                 $sql = "SELECT id FROM parcel WHERE number = '$parcel_number'";
                 $result = $conn->query($sql);
@@ -144,6 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id_owner = null;
                 $id_company = null;
 
+                // Retrieve owner ID if available
                 $first_name = $row['first_name'] ?? null;
                 $last_name = $row['last_name'] ?? null;
                 if ($first_name != null && $last_name != null) {
@@ -152,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $id_owner = $result->fetch_assoc()['id'];
                 }
 
+                // Retrieve company ID if available
                 $company_name = $row['company_name'] ?? null;
                 if ($company_name != null) {
                     $sql = "SELECT id FROM company WHERE name = '$company_name'";
@@ -159,6 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $id_company = $result->fetch_assoc()['id'];
                 }
 
+                // Handle insertion based on owner and company IDs
                 if ($id_owner == null && $id_company == null) {
                     continue;
                 } elseif ($id_owner == null) {
@@ -166,6 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($id_company == null) {
                     $sql = "INSERT INTO ownership_list (id_parcel, id_owner, stake) VALUES ('" . $id_parcel . "', '" . $id_owner . "', '" . $row['stake'] . "')";
                 }
+                // Execute the SQL query
                 if ($conn->query($sql) !== TRUE) {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }

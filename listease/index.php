@@ -1,31 +1,42 @@
 <?php
-//show error
-ini_set('display_errors', 1);
 session_start();
+
+// Redirect to login page if email session variable is not set
 if (!isset($_SESSION['email'])){
     header('Location: login.php');
     exit();
 }
+
 include('../database_checker.php');
+
 $connection->select_db('listease');
+
 $id = $_SESSION['id'];
+
+// Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $item = filter_input(INPUT_POST, 'item-name', FILTER_SANITIZE_STRING);
     $stmt = $connection->prepare("INSERT INTO items (name, user_id) VALUES (?, ?)");
     $stmt->bind_param('si', $item, $id);
     $stmt->execute();
-    header('Location: index.php');
+    header('Location: ./');
     exit();
 }
+
 $itemsArray = [];
+
+// Fetch items for the current user
 $sql = "SELECT * FROM items WHERE user_id = '$id'";
 $result = $connection->query($sql);
+
+// Populate $itemsArray with fetched items
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $itemsArray[] = $row;
     }
 }
 
+// HTML output starts here
 echo '<!doctype html>';
 echo '<html lang="en">';
 echo '<head>';
@@ -52,6 +63,7 @@ echo '<h1 class="text-center">Shopping list</h1>';
 echo '</div>';
 echo '</div>';
 
+// Display error message if set
 if (isset($_SESSION['error_message'])) {
     echo '<div class="alert alert-danger" role="alert">';
     echo $_SESSION['error_message'];
@@ -62,7 +74,7 @@ unset($_SESSION['error_message']);
 
 echo '<div class="row">';
 echo '<div class="col-12">';
-echo '<form action="index.php" method="post">';
+echo '<form action="./" method="post">';
 echo '<div class="input-group mb-3">';
 echo '<input type="text" class="form-control" placeholder="Add new item" name="item-name">';
 echo '<button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="bi bi-plus-lg"></i></button>';
@@ -121,14 +133,14 @@ if (empty($itemsArray)) {
             echo '<button type="button" class="btn btn-primary col mt-2" data-bs-toggle="modal" data-bs-target="#priceModal' . $item['id'] . '">';
             echo '<i class="bi bi-cash h3"></i>';
             echo '</button>';
-            echo '<div class="modal fade text-dark" id="priceModal' . $item['id'] . '" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">';
+            echo '<div class="modal fade" id="priceModal' . $item['id'] . '" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">';
             echo '<div class="modal-dialog">';
             echo '<div class="modal-content">';
             echo '<div class="modal-header">';
             echo '<h5 class="modal-title" id="priceModalLabel">Add price</h5>';
             echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
             echo '</div>';
-            echo '<div class="modal-body text-dark">';
+            echo '<div class="modal-body">';
             echo '<form action="price.php" method="post">';
             echo '<input type="hidden" name="id" value="' . $item['id'] . '">';
             echo '<div class="mb-3">';
@@ -149,14 +161,14 @@ if (empty($itemsArray)) {
             echo '<button type="button" class="btn btn-primary btn-block col mt-2" data-bs-toggle="modal" data-bs-target="#quantityModal' . $item['id'] . '">';
             echo '<i class="bi bi-plus h3"></i>';
             echo '</button>';
-            echo '<div class="modal fade text-dark" id="quantityModal' . $item['id'] . '" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">';
+            echo '<div class="modal fade" id="quantityModal' . $item['id'] . '" tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">';
             echo '<div class="modal-dialog">';
             echo '<div class="modal-content">';
             echo '<div class="modal-header">';
             echo '<h5 class="modal-title" id="quantityModalLabel">Add quantity</h5>';
             echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
             echo '</div>';
-            echo '<div class="modal-body text-dark">';
+            echo '<div class="modal-body">';
             echo '<form action="quantity.php" method="post">';
             echo '<input type="hidden" name="id" value="' . $item['id'] . '">';
             echo '<div class="mb-3">';
@@ -172,14 +184,14 @@ if (empty($itemsArray)) {
         }
         echo '</td>';
         echo '</tr>';
-        echo '<div class="modal fade text-dark" id="deleteModal' . $item['id'] . '" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">';
+        echo '<div class="modal fade" id="deleteModal' . $item['id'] . '" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">';
         echo '<div class="modal-dialog">';
         echo '<div class="modal-content">';
         echo '<div class="modal-header">';
         echo '<h5 class="modal-title" id="deleteModalLabel">Delete item</h5>';
         echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
         echo '</div>';
-        echo '<div class="modal-body text-dark">';
+        echo '<div class="modal-body">';
         echo '<p>Are you sure you want to delete this item?</p>';
         echo '<p><i>' . $item['name'] . '</i></p>';
         echo '<form action="delete.php" method="post">';

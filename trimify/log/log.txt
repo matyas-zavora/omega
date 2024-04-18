@@ -20,3 +20,6 @@
 18/4/2024 18:53:18 - success - test.txt has been uploaded successfully.
 18/4/2024 18:53:18 - info - File test.txt has been renamed to fweoíéj.txt
 18/4/2024 18:53:18 - info - File fweoíéj.txt has been deleted.
+18/4/2024 20:56:49 - success - test.txt has been uploaded successfully.
+18/4/2024 20:56:49 - info - File test.txt has been renamed to ahoj.txt
+18/4/2024 20:56:49 - info - File ahoj.txt has been deleted.

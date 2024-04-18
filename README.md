@@ -26,7 +26,7 @@ The application uses a MySQL database to store data related to each sub-project.
 
 <details>
 <summary>EstateAtlas</summary>
-![image](https://github.com/matyas-zavora/omega/assets/105340917/464f72ce-0a3e-4305-9934-4f92eab5ff09)
+<img src="https://github.com/matyas-zavora/omega/assets/105340917/464f72ce-0a3e-4305-9934-4f92eab5ff09">
 </details>
 <details>
 <summary>ListEase</summary>

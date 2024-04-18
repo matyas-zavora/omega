@@ -5,11 +5,17 @@ if (!isset($_GET['tool'])) {
     header('Location: index.php');
     exit();
 }
+session_start();
+if (isset($_SESSION['email'])){
+    unset($_SESSION['email']);
+}
 include('./database_checker.php');
 if (isset($database_connected, $connection)) {
     if (!$database_connected) {
         if ($_GET['tool'] == 'listease') {
             try {
+                echo "test";
+                exit();
                 CreateDatabaseListEase($connection);
             } catch (Exception $e) {
             }
@@ -56,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     createDatabaseEstateAtlas($connection);
                 }
             }
+            header("Location: ./" . $_GET['tool']);
             exit();
         }
         $_SESSION['conn_params'] = [

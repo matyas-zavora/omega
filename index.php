@@ -179,10 +179,8 @@ if (isset($_SESSION['conn_params'])) {
     echo '</div>';
     echo '</div>';
     echo '</div>';
-
 }
-?>
-<?php
+
 if (isset($_GET['status'])) {
     echo '<script> setTimeout(() => { window.location.href = "./index.php"; }, 2000); </script>';
 }

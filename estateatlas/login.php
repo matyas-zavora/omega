@@ -1,6 +1,4 @@
 <?php
-//show errors
-ini_set('display_errors', 1);
 session_start();
 include('../database_checker.php');
 $connection->select_db('estateatlas');
@@ -40,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="../styles/font.css">
-    <title>EstateAtlas - login</title>
+    <title>EstateAtlas - Login</title>
 </head>
 <body>
 <div class="container">
@@ -52,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="row">
         <div class="col-12">
             <form action="./login.php" method="post">
-                <input type="hidden" name="form" value="login">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" class="form-control" id="email" name="email">

@@ -1,14 +1,27 @@
 <?php
 session_start();
-
+if (!isset($_SESSION['email'])){
+    header('Location: login.php');
+    exit();
+}
 include('../database_checker.php');
-if (!isset($_SESSION['email'])) header('Location: login.php');
-
+$connection->select_db('listease');
+$id = $_SESSION['id'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $item = $_POST['item-name'];
-    $connection->query("INSERT INTO items (name, user_id) VALUES ('$item', '$id')");
+    $item = filter_input(INPUT_POST, 'item-name', FILTER_SANITIZE_STRING);
+    $stmt = $connection->prepare("INSERT INTO items (name, user_id) VALUES (?, ?)");
+    $stmt->bind_param('si', $item, $id);
+    $stmt->execute();
     header('Location: index.php');
     exit();
+}
+$itemsArray = [];
+$sql = "SELECT * FROM items WHERE user_id = '$id'";
+$result = $connection->query($sql);
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $itemsArray[] = $row;
+    }
 }
 ?>
 <!doctype html>
@@ -56,37 +69,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="text" class="form-control" placeholder="Add new item" name="item-name">
                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
                                 class="bi bi-plus-lg"></i></button>
+                    <a href="logout.php" class="btn btn-danger">Logout</a>
+                    <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
                 </div>
             </form>
         </div>
     </div>
     <div class="row">
+        <!-- check if there are any items -->
+        <?php
+        ?>
         <div class="col-12">
             <ul class="list-group list-group-flush">
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Quantity</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Action</th>
+                        <th scope="col" class="col-3">Name</th>
+                        <th scope="col" class="col-3">Quantity</th>
+                        <th scope="col" class="col-3">Price</th>
+                        <th scope="col" class="col-3">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($itemsArray as $item): ?>
                         <tr>
-                            <td><?php echo $item['name']; ?></td>
-                            <td><?php echo $item['quantity']; ?></td>
-                            <td><?php echo $item['price'] . ' CZK'; ?></td>
-                            <td><?php ?></td>
-                            <td>
-                                <button type="submit" class="btn btn-danger" data-bs-toggle="modal"
+                            <td class="align-middle"><?php echo $item['name']; ?></td>
+                            <td class="align-middle"><?php echo $item['quantity']; ?></td>
+                            <td class="align-middle">
+                                <?php
+                                if (isset($_item['price'])){
+                                echo $item['price'] . ' CZK';
+                                }
+                                ?>
+                            </td>
+                            <td class="text-end d-flex justify-content-between row">
+                                <button type="submit" class="btn btn-danger col" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal<?php echo $item['id']; ?>"><i
-                                            class="bi bi-trash h1"></i></button>
+                                            class="bi bi-trash h3"></i></button>
                                 <?php if (is_null($item['price'])) : ?>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    <button type="button" class="btn btn-primary col me-2 ms-2" data-bs-toggle="modal"
                                             data-bs-target="#priceModal<?php echo $item['id']; ?>">
-                                        <i class="bi bi-cash h1"></i>
+                                        <i class="bi bi-cash h3"></i>
                                     </button>
                                     <div class="modal fade text-dark" id="priceModal<?php echo $item['id']; ?>"
                                          tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
@@ -118,12 +141,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             </div>
                                         </div>
                                     </div>
-
                                 <?php endif; ?>
                                 <?php if (is_null($item['quantity'])) : ?>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-primary btn-block col" data-bs-toggle="modal"
                                         data-bs-target="#quantityModal<?php echo $item['id']; ?>">
-                                    <i class="bi bi-plus h1"></i>
+                                    <i class="bi bi-plus h3"></i>
                                 </button>
                                 <div class="modal fade text-dark" id="quantityModal<?php echo $item['id']; ?>"
                                      tabindex="-1" aria-labelledby="quantityModalLabel" aria-hidden="true">

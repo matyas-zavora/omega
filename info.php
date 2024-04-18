@@ -1,7 +1,4 @@
 <?php
-//show errors
-ini_set('display_errors', 1);
-
 session_start();
 if (isset($_SESSION['conn_params'])) {
     header("Location: ./estateatlas/index.php");

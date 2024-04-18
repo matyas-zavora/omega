@@ -1,21 +1,22 @@
 <?php
+//show errors
+ini_set('display_errors', 1);
 session_start();
+include('../database_checker.php');
+$connection->select_db('listease');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $connection = new mysqli('localhost', 'root', '', 'listease');
-    $sql = "SELECT id,psw FROM users WHERE email = '$email'";
-    $result = $connection->query($sql);
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row['psw'])) {
-            $_SESSION['email'] = $email;
-            $_SESSION['id'] = $row['id'];
-            header('Location: index.php');
-            exit();
-        }
-    } else {
-        echo '<div class="alert alert-danger" role="alert">Invalid email or password</div>';
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $connection->prepare("INSERT INTO users (email, psw) VALUES (?, ?)");
+    $stmt->bind_param("ss", $email, $password);
+    try {
+        $stmt->execute();
+        $_SESSION['email'] = $email;
+        header('Location: ./');
+    } catch (Exception $e) {
+        $error = $e;
     }
 }
 ?>
@@ -36,11 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="./styles/font.css">
+    <link rel="stylesheet" href="../styles/font.css">
     <title>ListEase - Registration</title>
 </head>
 <body>
-<!-- Registration form -->
+<?php if (isset($error)): ?>
+    <div class="alert alert-danger" role="alert">
+        <?php echo $error->getMessage(); ?>
+    </div>
+<?php endif; ?>
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -49,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="register.php" method="post">
+            <form action="./register.php" method="post">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
                     <input type="text" class="form-control" id="email" name="email">
@@ -60,9 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <button type="submit" class="btn btn-success">Register</button>
                 <a class="btn btn-info" href="login.php">Login</a>
+                <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
             </form>
         </div>
     </div>
 </div>
+<script src="../scripts/dark-mode.js"></script>
 </body>
 </html>

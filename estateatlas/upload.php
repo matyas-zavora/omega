@@ -15,6 +15,8 @@ $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['pas
     <meta charset="UTF-8">
     <title>EstateAtlas | Read</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
     <link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
@@ -31,15 +33,17 @@ $conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['pas
     <form enctype="multipart/form-data" method="POST">
         <input name="formName" type="hidden" value="fileUpload">
         <label for="fileToUpload">Select a file:</label>
-        <!--     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);-->
         <input accept=".csv" id="fileToUpload" name="fileToUpload" type="file">
         <button class="btn btn-primary" type="submit">Upload</button>
-        <a class="btn btn-danger" href="">Return</a>
+        <a class="btn btn-danger" href="./files.php">Return</a>
+        <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
+
     </form>
 </div>
+<script src="../scripts/dark-mode.js"></script>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $target_dir = "../input/";
+    $target_dir = "./input/";
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
     $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));

@@ -1,22 +1,63 @@
 <?php
 session_start();
+//show errors
+ini_set('display_errors', 1);
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();
 }
-include "../templates/manually.php";
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>EstateAtlas | Write Manually</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
+        <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+        <link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+        <link href="img/favicon/site.webmanifest" rel="manifest">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <link href="styles/reset.css" rel="stylesheet">
+        <link href="styles/index.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+              rel="stylesheet"/>
+        <link href="styles/google_icons.css" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container">
+        <form method="post">
+            <input name="formName" type="hidden" value="dataInsertPicker">
+            <label for="table">Select a table:</label>
+            <select id="table" name="table">
+                <option value="user">User</option>
+                <option value="parcel">Parcel</option>
+                <option value="company">Company</option>
+                <option value="owner">Owner</option>
+                <option value="ownership_list">Ownership List</option>
+            </select>
+            <button class="btn btn-primary" type="submit">Select</button>
+            <a class="btn btn-danger" href="./write.php">Return</a>
+            <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
+
+        </form>
+    </div>
+<?php
 $conn_params = $_SESSION['conn_params'];
-$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], 'estateatlas', $conn_params['port']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($_POST['formName'] == 'dataInsertPicker') {
         $tableName = $_POST['table'] ?? '';
+        include("./templates.php");
         switch ($tableName) {
             case 'company':
-                include "../templates/write/company.php";
+                templateCompany();
                 break;
             case 'owner':
-                include "../templates/write/owner.php";
+                templateOwner();
                 break;
             case 'ownership_list':
                 $parcels = $conn->query("SELECT id, number FROM parcel");
@@ -49,14 +90,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     displayMessage("Error: All parcels are fully owned", "danger");
                     break;
                 } else {
-                    include "../templates/write/ownership_list.php";
+                    templateOwnershipList($parcels, $owners, $companies);
                     break;
                 }
             case 'parcel':
-                include "../templates/write/parcel.php";
+                templateParcels();
                 break;
             case 'user':
-                include "../templates/write/user.php";
+                templateUser();
                 break;
         }
     } else {
@@ -104,7 +145,7 @@ function handleUserInsertManually(mysqli $conn): mysqli_stmt|null
     $password = filter_input(INPUT_POST, 'formPassword', FILTER_SANITIZE_STRING);
     $password = password_hash($conn->real_escape_string($password), PASSWORD_DEFAULT);
 
-    $stmt = $conn->prepare("INSERT INTO user (email, password, isCool) VALUES (?, ?, 0)");
+    $stmt = $conn->prepare("INSERT INTO user (email, password) VALUES (?, ?)");
     $stmt->bind_param("ss", $email, $password);
 
     $sql_user = "SELECT id FROM user WHERE email = '" . $_SESSION['email'] . "'";
@@ -256,34 +297,6 @@ function displayMessage(string $message, string $type): void
     echo "<div class='alert alert-" . $type . "' role='alert' id='errorAlert'>" . $message . "</div>";
     echo "<script>setTimeout(function() { document.getElementById('errorAlert').style.display='none'; }, 3000);</script>";
 }
+echo '<script src="../scripts/dark-mode.js"></script>';
+echo '</div></body></html>';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>EstateAtlas | Write Manually</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
-    <link href="../img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-    <link href="../img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-    <link href="../img/favicon/site.webmanifest" rel="manifest">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <link href="../styles/reset.css" rel="stylesheet">
-    <link href="../styles/assignment.css" rel="stylesheet">
-</head>
-<body>
-<div class="container">
-    <form method="post">
-        <input name="formName" type="hidden" value="dataInsertPicker">
-        <label for="table">Select a table:</label>
-        <select id="table" name="table">
-            <option value="user">User</option>
-            <option value="parcel">Parcel</option>
-            <option value="company">Company</option>
-            <option value="owner">Owner</option>
-            <option value="ownership_list">Ownership List</option>
-        </select>
-        <button class="btn btn-primary" type="submit">Select</button>
-        <a class="btn btn-danger" href="../">Return</a>
-    </form>
-</div>

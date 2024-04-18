@@ -1,14 +1,14 @@
 <?php
-// This file is supposed to be called from the download button in the read.php file.
-// It will download the full parcel data as a CSV file.
-// The file will be named "full_parcel_data.csv".
+// show errors
+ini_set('display_errors', 1);
+
 session_start();
 if (!isset($_SESSION['email'])) {
     header("Location: ../");
     exit();
 }
 $conn_params = $_SESSION['conn_params'];
-$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], null, $conn_params['port']);
+$conn = new mysqli($conn_params['host'], $conn_params['user'], $conn_params['password'], 'estateatlas', $conn_params['port']);
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if ($conn->connect_error) {
@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
     $data = $conn->query($sql_data);
 
-    $file = fopen("../output/full_parcel_data.csv", "w");
+    $file = fopen("./output/full_parcel_data.csv", "w");
 
     // Write the header to the CSV file
     fputcsv($file, array_keys($data->fetch_assoc()));
@@ -67,6 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     header("Content-Disposition: attachment; filename=full_parcel_data.csv");
     header("Pragma: no-cache");
     header("Expires: 0");
-    readfile("../output/full_parcel_data.csv");
+    readfile("./output/full_parcel_data.csv");
     exit;
 }

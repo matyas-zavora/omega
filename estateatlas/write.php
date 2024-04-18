@@ -11,6 +11,8 @@ if (!isset($_SESSION['email'])) {
     <meta charset="UTF-8">
     <title>EstateAtlas | Write</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
     <link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
@@ -26,20 +28,27 @@ if (!isset($_SESSION['email'])) {
 <div class="container" style="height: 89vh;">
     <div class="row">
         <div class="col-md-6">
-            <a class="btn btn-warning btn-lg btn-block" href="files.php" role="button"><span
-                        class="material-symbols-outlined" style="font-size:250px;">home_storage</span><br>Files</a>
+            <a class="btn btn-warning btn-lg btn-block" href="files.php" role="button">
+                <i class="bi bi-file-earmark" style="font-size: 250px;"></i><br>Files</a>
         </div>
         <div class="col-md-6">
-            <a class="btn btn-warning btn-lg btn-block" href="manually.php" role="button"><span
-                        class="material-symbols-outlined" style="font-size:250px;">edit_note</span><br>Manually</a>
+            <a class="btn btn-warning btn-lg btn-block" href="manually.php" role="button">
+                <i class="bi bi-pencil-square" style="font-size:250px;"></i><br>Manually
+            </a>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12" style="margin-top: 30px;">
-            <a class="btn btn-warning btn-lg btn-block" href="./" role="button"><span
-                        class="material-symbols-outlined" style="font-size:250px;">arrow_back</span><br>Return</a>
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-md-10">
+            <a class="btn btn-danger btn-lg btn-block" href="./" role="button"
+               style="height: 100px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-arrow-left m-2" style="font-size:55px;"></i>Return
+            </a>
+        </div>
+        <div class="col-md-2">
+            <button id="switch" class="btn btn-lg btn-secondary btn-block" onclick="cycleThemes()" style="font-size:55px;" type="button">Switch</button>
         </div>
     </div>
 </div>
+<script src="../scripts/dark-mode.js"></script>
 </body>
 </html>

@@ -13,6 +13,8 @@ if (!isset($_SESSION['email'])) {
     <meta charset="UTF-8">
     <title>EstateAtlas | Read</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="img/favicon/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
     <link href="img/favicon/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
     <link href="img/favicon/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
@@ -38,6 +40,7 @@ if (!isset($_SESSION['email'])) {
         </select>
         <button class="btn btn-primary" type="submit">Read</button>
         <a class="btn btn-danger" href="./">Return</a>
+        <button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>
     </form>
 </div>
 <?php
@@ -131,5 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "</tbody></table>";
 
 }
+echo '<script src="../scripts/dark-mode.js"></script>';
 echo '</div></body></html>';
 ?>

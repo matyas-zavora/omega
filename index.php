@@ -63,6 +63,28 @@ echo '</ul>';
 echo '</div>';
 echo '</div>';
 echo '</nav>';
+/*
+ * Display the message if it is available.
+ */
+if (isset($_GET['status'])){
+    $status = $_GET['status'];
+    $status = str_replace('_', ' ', $status);
+    $first_word = explode(' ', $status)[0];
+    $status = substr($status, strlen($first_word)+1);
+    switch ($first_word){
+        case 'success':
+            echo '<div class="alert alert-success text-center" role="alert">';
+            break;
+        case 'error':
+            echo '<div class="alert alert-danger text-center" role="alert">';
+            break;
+        default:
+            echo '<div class="alert alert-warning text-center" role="alert">';
+            break;
+    }
+    echo $status;
+    echo '</div>';
+}
 
 /**
  * Projects Section.
@@ -98,7 +120,7 @@ echo '<h5 class="card-title">EstateAtlas</h5>';
 echo '<p class="card-text">Cadastre of Real Estate</p>';
 echo '</div>';
 echo '</div>';
-echo '<button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#project2Collapse" aria-expanded="false" aria-controls="project2Collapse">Details</button>';
+echo '<button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#project2Collapse" aria-expanded="false" aria-controls="project2Collapse">Details</button> ';
 echo '<a href="./connect.php?tool=estateatlas" class="btn btn-success" target="_blank">View project</a> ';
 echo '<a href="https://github.com/matyas-zavora/aplha-3" class="btn btn-secondary" target="_blank"><i class="bi bi-github"></i></a>';
 echo '</div>';

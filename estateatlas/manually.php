@@ -41,10 +41,10 @@ echo '<option value="parcel">Parcel</option>';
 echo '<option value="company">Company</option>';
 echo '<option value="owner">Owner</option>';
 echo '<option value="ownership_list">Ownership List</option>';
-echo '</select>';
+echo '</select> ';
 // Buttons for form submission and returning
-echo '<button class="btn btn-primary" type="submit">Select</button>';
-echo '<a class="btn btn-danger" href="./write.php">Return</a>';
+echo '<button class="btn btn-primary" type="submit">Select</button> ';
+echo '<a class="btn btn-danger" href="./write.php">Return</a> ';
 // Button for theme switching
 echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>';
 echo '</form>';

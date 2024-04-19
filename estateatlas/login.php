@@ -1,4 +1,6 @@
 <?php
+//show errors
+ini_set('display_errors', 1);
 session_start(); // Start the session to manage user sessions
 include('../database_checker.php'); // Include the file for database connection
 $connection->select_db('estateatlas'); // Select the database named 'estateatlas'

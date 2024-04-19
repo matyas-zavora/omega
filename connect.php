@@ -27,17 +27,13 @@ include('./database_checker.php');
 // Check if database is connected and connection object is set
 if (isset($database_connected, $connection)) {
     // If database is not connected, attempt to create databases for specific tools
-    if (!$database_connected) {
+    try{
+        $connection->select_db($_GET['tool']);
+    } catch (Exception $e) {
         if ($_GET['tool'] == 'listease') {
-            try {
-                CreateDatabaseListEase($connection);
-            } catch (Exception $e) {
-            }
+            CreateDatabaseListEase($connection);
         } else if ($_GET['tool'] == 'estateatlas') {
-            try {
-                createDatabaseEstateAtlas($connection);
-            } catch (Exception $e) {
-            }
+            createDatabaseEstateAtlas($connection);
         }
     }
     // Redirect to the corresponding tool page
@@ -178,11 +174,8 @@ echo '</html>';
 function createDatabaseListEase(mysqli $conn): void
 {
     // Create ListEase database tables
-    try {
-        $sql = 'DROP DATABASE `listease`';
-        $conn->query($sql);
-    } catch (Exception $e) {
-    }
+
+    $conn->query('DROP DATABASE IF EXISTS `listease`');
     $conn->query("SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';");
     $conn->query("START TRANSACTION;");
     $conn->query("SET time_zone = '+00:00';");
@@ -214,6 +207,7 @@ function createDatabaseListEase(mysqli $conn): void
     $conn->query($sql);
     $conn->query('ALTER TABLE `users` ADD UNIQUE(`email`); ');
 
+    $conn->query("COMMIT;");
 }
 
 // Function to create EstateAtlas database

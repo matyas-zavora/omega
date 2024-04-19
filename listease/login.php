@@ -1,4 +1,6 @@
 <?php
+//show errors
+ini_set('display_errors', 1);
 session_start(); // Start the session to manage user sessions
 include('../database_checker.php'); // Include the file for database connection
 $connection->select_db('listease'); // Select the database named 'listease'
@@ -74,8 +76,8 @@ echo '<div class="mb-3">';
 echo '<label for="password" class="form-label">Password</label>';
 echo '<input type="password" class="form-control" id="password" name="password">';
 echo '</div>';
-echo '<button type="submit" class="btn btn-success">Login</button>';
-echo '<a class="btn btn-info" href="register.php">Register</a>';
+echo '<button type="submit" class="btn btn-success">Login</button> ';
+echo '<a class="btn btn-info" href="register.php">Register</a> ';
 echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>';
 echo '</form>';
 echo '</div>';

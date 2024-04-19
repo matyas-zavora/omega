@@ -52,7 +52,7 @@ echo '</div>';
 echo '</div>';
 echo '<div class="row btn-container">';
 echo '<div class="col-md-2 col-md-offset-5">';
-echo '<a class="btn btn-primary" href="./">Back</a>';
+echo '<a class="btn btn-primary" href="./">Back</a> ';
 echo '<button id="switch" class="btn btn-secondary" onclick="cycleThemes()" type="button">Switch</button>';
 echo '</div>';
 echo '<script src="../scripts/dark-mode.js"></script>';
